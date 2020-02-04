@@ -1,6 +1,6 @@
 {
-  "name": "electron-react-typescript",
-  "version": "0.0.6",
+  "name": "seisho",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
@@ -49,10 +49,10 @@
     ]
   },
   "build": {
-    "productName": "ProductName",
-    "appId": "org.your.productname",
+    "productName": "Seisho",
+    "appId": "org.seisho.dev",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.entertainment"
     },
     "directories": {
       "output": "release"
