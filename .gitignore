@@ -2,6 +2,6 @@ node_modules/
 dist/
 release/
 
-# Intelij
+# Editors
 .idea/
 .vscode/
