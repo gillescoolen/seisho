@@ -19,7 +19,7 @@ const createWindow = async () => {
     await installExtensions();
   }
 
-  win = new BrowserWindow({ width: 800, height: 600 });
+  win = new BrowserWindow({ width: 1440, height: 760 });
 
   if (process.env.NODE_ENV !== 'production') {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
@@ -40,6 +40,8 @@ const createWindow = async () => {
       win!.webContents.openDevTools();
     });
   }
+
+  win.setMenu(null);
 
   win.on('closed', () => {
     win = null;
