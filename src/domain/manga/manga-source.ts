@@ -1,4 +1,5 @@
 import { Manga } from "./manga";
+import { Status } from "./status";
 
 export abstract class MangaSource {
   protected abstract getBaseUrl(): string;
@@ -7,6 +8,7 @@ export abstract class MangaSource {
 
   public abstract async search(name: string,  pageNumber: number): Promise<Manga[]>;
 
+  protected abstract parseStatus(rawStatus: string): Status;
 
   protected async postForm<T>(url: string, formData: FormData) {
     const response = await fetch(url, {

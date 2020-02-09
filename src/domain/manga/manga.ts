@@ -9,7 +9,7 @@ export class Manga {
 
   private genres: string[] = [];
 
-  private status: Status = Status.createDefault();
+  private status: Status = Status.UNKNOWN;
 
   public getTitle(): string {
     return this.title;

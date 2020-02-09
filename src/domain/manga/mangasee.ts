@@ -62,10 +62,22 @@ export class Mangasee extends MangaSource {
       });
 
       const statusElement = requestedElement.querySelector<HTMLLinkElement>('p:nth-child(3) > a:nth-child(1)');
-      manga.setStatus(Status.fromMangaSee(statusElement?.textContent || ''));
+      manga.setStatus(this.parseStatus(statusElement?.textContent || ''));
 
       return manga;
     });
+  }
+
+  protected parseStatus(rawStatus: string): Status {
+    if (rawStatus.includes('Ongoing (Scan)')) {
+      return Status.ONGOING;
+    }
+
+    if (rawStatus.includes('Complete (Scan)')) {
+      return Status.COMPLETED;
+    }
+
+    return Status.UNKNOWN;
   }
 
 }
