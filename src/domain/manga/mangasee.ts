@@ -1,5 +1,6 @@
 import { MangaSource } from "./manga-source";
 import { Manga } from "./manga";
+import { Status } from "./status";
 
 export class Mangasee extends MangaSource {
   protected getBaseUrl(): string {
@@ -29,9 +30,42 @@ export class Mangasee extends MangaSource {
     formData.set('keyword', name);
     formData.set('page', pageNumber.toString());
 
-    console.log(await this.parseHTML(await this.postForm(`${this.getBaseUrl()}/search/request.php`, formData)));
+    const html = await this.postForm<string>(`${this.getBaseUrl()}/search/request.php`, formData);
+    const document = await this.parseHTML(html);
 
-    return [];
+    return [...document.querySelectorAll<HTMLDivElement>('.requested')].map(requestedElement => {
+      const manga = new Manga();
+
+      const imageElement = requestedElement.querySelector<HTMLImageElement>('img');
+      manga.setThumbnailUrl(imageElement?.src || '');
+
+      const detailElement = requestedElement.querySelector<HTMLDivElement>('div.col-xs-8');
+
+      if (!detailElement) {
+        throw new Error('Could not find the detail element');
+      }
+
+      const titleElement = detailElement.querySelector<HTMLLinkElement>("a");
+      manga.setTitle(titleElement?.textContent || '');
+
+      const authorElement = detailElement.querySelector<HTMLLinkElement>("p:nth-child(2) > a");
+      manga.setAuthor(authorElement?.textContent || '');
+
+      const genresElement = detailElement.querySelector<HTMLParagraphElement>('p:nth-child(5)');
+
+      genresElement?.querySelectorAll<HTMLLinkElement>('a').forEach(genreElement => {
+        const genre = genreElement.textContent;
+
+        if (genre) {
+          manga.addGenre(genre)
+        }
+      });
+
+      const statusElement = requestedElement.querySelector<HTMLLinkElement>('p:nth-child(3) > a:nth-child(1)');
+      manga.setStatus(Status.fromMangaSee(statusElement?.textContent || ''));
+
+      return manga;
+    });
   }
 
 }

@@ -1,18 +1,15 @@
 // This implementation is specific to Mangasee
+import { Status } from "./status";
+
 export class Manga {
-  private artist: string = '';
   private title: string = '';
   private author: string = '';
   private description: string | null = null;
   private thumbnailUrl: string = '';
 
-  public getArtist(): string {
-    return this.artist;
-  }
+  private genres: string[] = [];
 
-  public setArtist(value: string) {
-    this.artist = value;
-  }
+  private status: Status = Status.createDefault();
 
   public getTitle(): string {
     return this.title;
@@ -44,5 +41,21 @@ export class Manga {
 
   public setThumbnailUrl(value: string) {
     this.thumbnailUrl = value;
+  }
+
+  public getGenres() {
+    return this.genres;
+  }
+
+  public addGenre(genre: string) {
+    this.genres.push(genre);
+  }
+
+  public setStatus(status: Status) {
+    this.status = status;
+  }
+
+  public getStatus() {
+    return this.status;
   }
 }

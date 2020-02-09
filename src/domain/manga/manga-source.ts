@@ -6,7 +6,6 @@ export abstract class MangaSource {
 
   public abstract getName(): string;
 
-  // TODO: fix types.
   public abstract async search(name: string,  pageNumber: number): Promise<Manga[]>;
 
   protected getClient() {
