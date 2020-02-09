@@ -1,5 +1,4 @@
 import { Manga } from "./manga";
-import axios from 'axios'
 
 export abstract class MangaSource {
   protected abstract getBaseUrl(): string;
@@ -8,30 +7,31 @@ export abstract class MangaSource {
 
   public abstract async search(name: string,  pageNumber: number): Promise<Manga[]>;
 
-  protected getClient() {
-    return axios;
-  }
 
   protected async postForm<T>(url: string, formData: FormData) {
-    const response = await this.getClient().post<T>(url, formData);
+    const response = await fetch(url, {
+      body: formData,
+      method: 'post',
+    });
 
-    if (response.status !== 200) {
+    return await this.processResponse<T>(response);
+  }
+
+  private async processResponse<T>(response: Response): Promise<T | string> {
+    if (!response.ok) {
       // TODO create own error
-      throw new Error("nani da fuck");
+      throw new Error(response.statusText);
     }
 
-    return response.data;
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      return await response.json() as T
+    }
+
+    return response.text()
   }
 
   protected async getRawHTML(url: string): Promise<string> {
-    const response = await axios.get<string>(url);
-
-    if (response.status !== 200) {
-      // TODO create own error
-      throw new Error("nani da fuck");
-    }
-
-    return response.data;
+    return this.processResponse(await fetch(url));
   }
 
   protected async parseHTML(html: string): Promise<Document> {
