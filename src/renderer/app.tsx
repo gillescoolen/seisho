@@ -7,7 +7,6 @@ import Home from './components/Home';
 // Create main element
 const mainElement = document.createElement('div');
 document.body.appendChild(mainElement);
-
 // Render components
 const render = (Component: () => JSX.Element) => {
   ReactDOM.render(
