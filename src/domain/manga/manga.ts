@@ -1,7 +1,9 @@
 // This implementation is specific to Mangasee
 import { Status } from "./status";
+import { HttpResource } from "../http-resource";
+import { Chapter } from "./chapter";
 
-export class Manga {
+export class Manga extends HttpResource {
   private title: string = '';
   private author: string = '';
   private description: string | null = null;
@@ -10,6 +12,10 @@ export class Manga {
   private genres: string[] = [];
 
   private status: Status = Status.UNKNOWN;
+
+  private detailsLink: string = '';
+
+  private chapters: Chapter[] = [];
 
   public getTitle(): string {
     return this.title;
@@ -29,10 +35,6 @@ export class Manga {
 
   public getDescription(): string | null {
     return this.description;
-  }
-
-  public setDescription(value: string | null) {
-    this.description = value;
   }
 
   public getThumbnailUrl(): string {
@@ -57,5 +59,38 @@ export class Manga {
 
   public getStatus() {
     return this.status;
+  }
+
+  public setDetailsLink(link: string) {
+    this.detailsLink = link;
+  }
+
+  public getChapters() {
+    return this.chapters;
+  }
+
+  constructor(baseUri: string) {
+    super(baseUri);
+  }
+
+  public async getDetails() {
+    const document = await this.getHTMLFrom(`${this.baseUri}/${this.detailsLink}`);
+    const descriptionElement = document.querySelector('.description');
+    this.description = descriptionElement?.textContent || null;
+
+    this.chapters = [...document.querySelectorAll<HTMLLinkElement>('.list-group-item')].map(chapterElement => {
+      const chapter = new Chapter(`${this.baseUri}/${this.removeHostNameAndPort(chapterElement.href)}`);
+
+      const timeElement = chapterElement.querySelector<HTMLTimeElement>('.SeriesTime');
+
+      if (timeElement?.dateTime) {
+        chapter.setDate(new Date(timeElement?.dateTime));
+      }
+
+      const chapterLabelElement = chapterElement.querySelector<HTMLSpanElement>('.chapterLabel');
+      chapter.setTitle(chapterLabelElement?.textContent || '');
+
+      return chapter;
+    });
   }
 }
