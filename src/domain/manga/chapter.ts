@@ -1,4 +1,4 @@
-import { HttpResource } from "../http-resource";
+import { HttpResource } from '../http-resource';
 export class Chapter extends HttpResource {
   private title: string = '';
 

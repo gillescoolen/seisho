@@ -1,7 +1,7 @@
 // This implementation is specific to Mangasee
-import { Status } from "./status";
-import { HttpResource } from "../http-resource";
-import { Chapter } from "./chapter";
+import { Status } from './status';
+import { HttpResource } from '../http-resource';
+import { Chapter } from './chapter';
 
 export class Manga extends HttpResource {
   private title: string = '';
