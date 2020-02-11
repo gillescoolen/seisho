@@ -10,11 +10,8 @@ export class Manga extends HttpResource {
   private thumbnailUrl: string = '';
 
   private genres: string[] = [];
-
   private status: Status = Status.UNKNOWN;
-
   private detailsLink: string = '';
-
   private chapters: Chapter[] = [];
 
   public getTitle(): string {

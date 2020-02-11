@@ -2,8 +2,7 @@ import { HttpResource } from "../http-resource";
 export class Chapter extends HttpResource {
   private title: string = '';
 
-  // TODO: maybe use moment for this?
-  private date: Date = new Date(); // TODO: this can cause problems if there is no date..
+  private date: Date = new Date();
 
   private firstPage: number = 0;
   private lastPage: number = 0;
@@ -49,7 +48,6 @@ export class Chapter extends HttpResource {
     const firstPageElement = pageSelectElement.children.item(0) as HTMLOptionElement;
     const lastPageElement = pageSelectElement.children.item(pageSelectElement.children.length - 1) as HTMLOptionElement;
 
-
     this.firstPage = +firstPageElement.value;
     this.lastPage = +lastPageElement.value;
 
@@ -60,7 +58,6 @@ export class Chapter extends HttpResource {
       } else if (i < 100) {
         pageNumberAsString = '0'
       }
-
 
       const image =  imageElement.src.replace(/[0-9]+(?!.*[0-9])/, pageNumberAsString + i.toString());
       this.pages.push(image);

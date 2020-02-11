@@ -24,7 +24,7 @@ export abstract class HttpResource {
       return await response.json() as T
     }
 
-    return response.text()
+    return await response.text()
   }
 
   protected async getRawHTML(url: string): Promise<string> {
