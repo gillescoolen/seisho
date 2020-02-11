@@ -73,24 +73,27 @@ export class Manga extends HttpResource {
     super(baseUri);
   }
 
-  public async getDetails() {
+  public async fetchDetails() {
     const document = await this.getHTMLFrom(`${this.baseUri}/${this.detailsLink}`);
     const descriptionElement = document.querySelector('.description');
     this.description = descriptionElement?.textContent || null;
 
-    this.chapters = [...document.querySelectorAll<HTMLLinkElement>('.list-group-item')].map(chapterElement => {
-      const chapter = new Chapter(`${this.baseUri}/${this.removeHostNameAndPort(chapterElement.href)}`);
+    this.chapters = [...document.querySelectorAll<HTMLLinkElement>('.list-group-item')]
+      .map(chapterElement => this.buildChapter(chapterElement));
+  }
 
-      const timeElement = chapterElement.querySelector<HTMLTimeElement>('.SeriesTime');
+  private buildChapter(chapterElement: HTMLLinkElement): Chapter {
+    const chapter = new Chapter(`${this.baseUri}/${this.removeHostNameAndPort(chapterElement.href)}`);
 
-      if (timeElement?.dateTime) {
-        chapter.setDate(new Date(timeElement?.dateTime));
-      }
+    const timeElement = chapterElement.querySelector<HTMLTimeElement>('.SeriesTime');
 
-      const chapterLabelElement = chapterElement.querySelector<HTMLSpanElement>('.chapterLabel');
-      chapter.setTitle(chapterLabelElement?.textContent || '');
+    if (timeElement?.dateTime) {
+      chapter.setDate(new Date(timeElement.dateTime));
+    }
 
-      return chapter;
-    });
+    const chapterLabelElement = chapterElement.querySelector<HTMLSpanElement>('.chapterLabel');
+    chapter.setTitle(chapterLabelElement?.textContent || 'No title');
+
+    return chapter;
   }
 }

@@ -26,7 +26,8 @@
       "never"
     ],
     "jsx-no-string-ref": true,
-    "jsx-self-close": true
+    "jsx-self-close": true,
+    "no-increment-decrement": false
   },
   "rulesDirectory": []
 }

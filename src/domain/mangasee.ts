@@ -1,6 +1,6 @@
-import { MangaSource } from "./manga-source";
-import { Manga } from "./manga";
-import { Status } from "./status";
+import { MangaSource } from "./manga/manga-source";
+import { Manga } from "./manga/manga";
+import { Status } from "./manga/status";
 
 export class Mangasee extends MangaSource {
   constructor() {
