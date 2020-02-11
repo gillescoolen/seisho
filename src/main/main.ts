@@ -20,8 +20,8 @@ const createWindow = async () => {
   }
 
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1440,
+    height: 760,
     webPreferences: {
       // FIXME: find another solution for CORS...
       webSecurity: false
