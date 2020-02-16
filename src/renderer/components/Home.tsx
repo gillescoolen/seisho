@@ -1,28 +1,29 @@
-import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import Toolbar from './Toolbar/Toolbar';
-import styledComponents, { createGlobalStyle } from 'styled-components';
 import Overview from './Manga/Overview';
+import { hot } from 'react-hot-loader/root';
+import styled, { createGlobalStyle } from 'styled-components';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 
 const Home = () => (
   <Router>
     <Container>
       <Toolbar />
       <GlobalStyles />
-      <Switch>
-        <Route path="/overview">
+      <CacheSwitch>
+        <CacheRoute path="/overview">
           <Overview />
-        </Route>
-        <Route path="/">
+        </CacheRoute>
+        <CacheRoute path="/">
           <h1>Welcome stranger</h1>
-        </Route>
-      </Switch>
+        </CacheRoute>
+      </CacheSwitch>
     </Container>
   </Router>
 );
 
-const Container = styledComponents.div`
+const Container = styled.div`
   color: white;
   display: flex;
   min-height: 100vh;
@@ -33,6 +34,7 @@ const Container = styledComponents.div`
 const GlobalStyles = createGlobalStyle`
 body {
   margin: 0;
+  font-family: 'Arial';
 }`;
 
 export default hot(Home);
