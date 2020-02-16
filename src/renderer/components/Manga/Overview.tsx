@@ -1,35 +1,35 @@
 import Cover from "./Cover";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { hot } from 'react-hot-loader/root';
-import styledComponents from "styled-components";
+import styled from "styled-components";
 import { Mangasee } from '../../../domain/mangasee';
 import { Manga } from '../../../domain/manga/manga';
 
-const mangasee = new Mangasee();
-const manga = [];
-
 const Overview = () => {
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [manga, setManga] = useState<Manga[]>([]);
+
   useEffect(() => {
     (async function anyNameFunction() {
-      const data: Manga[] = await mangasee.search('berserk', 0);
-      data.forEach(info => manga.push(<Cover {...info} />));
-      console.log(data);
-      console.log(manga);
-      console.log(mangasee.search);
+      setManga(await new Mangasee().search(search, page));
     })();
-  }, []);
+  }, [setManga, setPage, setSearch]);
 
   return (
     <Container>
-      <h1>YEET</h1>
-      {manga.map(m => m)}
+      {manga.map((info, index) => <Cover manga={info} key={index} />)}
     </Container>
   )
 }
 
-const Container = styledComponents.div`
+const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fix, 250px);
+  padding: 1rem;
+  grid-gap: 25px;
+  place-items: center;
+  justify-content: space-evenly;
+  grid-template-columns: repeat(auto-fit, 250px);
 `;
 
 export default hot(Overview);
