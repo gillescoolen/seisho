@@ -40,7 +40,9 @@ export abstract class HttpResource {
     return await this.parseHTML(await this.getRawHTML(url));
   }
 
-  protected removeHostNameAndPort(url: string): string {
-    return url.replace(/^[a-z]{4,5}:\/{2}[a-z]+:[0-9]{1,4}.(.*)/, '$1');
+  protected parseUri(url: string): string {
+    return url
+      .replace(/^[a-z]{4,5}:\/{2}[a-z]+:[0-9]{1,4}.(.*)/, '$1')
+      .replace('file:///C:/','');
   }
 }

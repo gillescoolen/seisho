@@ -1,8 +1,8 @@
-import { MangaSource } from "./manga/manga-source";
-import { Manga } from "./manga/manga";
-import { Status } from "./manga/status";
+import { MangaSource } from "../manga-source";
+import { Status } from "../status";
+import { MangaseeManga } from "./mangasee-manga";
 
-export class Mangasee extends MangaSource {
+export class MangaseeSource extends MangaSource {
   constructor() {
     super("https://mangaseeonline.us");
   }
@@ -25,7 +25,7 @@ export class Mangasee extends MangaSource {
    genre:
    genreNo:
     */
-  async search(name: string, pageNumber: number): Promise<Manga[]> {
+  async search(name: string, pageNumber: number): Promise<MangaseeManga[]> {
     const formData = new FormData();
     formData.set('keyword', name);
     formData.set('page', pageNumber.toString());
@@ -46,8 +46,9 @@ export class Mangasee extends MangaSource {
       const genresElement = detailElement.querySelector<HTMLParagraphElement>('p:nth-child(5)');
       const statusElement = requestedElement.querySelector<HTMLLinkElement>('p:nth-child(3) > a:nth-child(1)');
 
-      const manga = new Manga(this.baseUri);
-      manga.setDetailsLink(this.removeHostNameAndPort(titleElement?.href || ''));
+      const manga = new MangaseeManga(this.baseUri);
+      console.log(titleElement?.href);
+      manga.setDetailsLink(this.parseUri(titleElement?.href || ''));
       manga.setTitle(titleElement?.textContent || '');
       manga.setThumbnailUrl(imageElement?.src || '');
       manga.setAuthor(authorElement?.textContent || '');
@@ -77,3 +78,4 @@ export class Mangasee extends MangaSource {
     return Status.UNKNOWN;
   }
 }
+
