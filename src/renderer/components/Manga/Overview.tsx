@@ -2,8 +2,8 @@ import Cover from "./Cover";
 import React, { useEffect, useState } from 'react';
 import { hot } from 'react-hot-loader/root';
 import styled from "styled-components";
-import { Mangasee } from '../../../domain/mangasee';
-import { Manga } from '../../../domain/manga/manga';
+import { MangaseeSource } from '../../../domain/mangasee/mangasee-source';
+import { Manga } from '../../../domain/manga';
 
 const Overview = () => {
   const [page, setPage] = useState(1);
@@ -14,7 +14,7 @@ const Overview = () => {
   useEffect(() => {
     (async () => {
       setLoadMore(false);
-      setManga([...manga, ...await new Mangasee().search(search, page)]);
+      setManga([...manga, ...await new MangaseeSource().search(search, page)]);
       setPage(page + 1)
     })();
 
