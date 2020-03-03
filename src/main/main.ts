@@ -47,7 +47,7 @@ const createWindow = async () => {
     });
   }
 
-  win.setMenu(null);
+  // win.setMenu(null);
 
   win.on('closed', () => {
     win = null;

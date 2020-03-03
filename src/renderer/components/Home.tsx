@@ -5,6 +5,7 @@ import { hot } from 'react-hot-loader/root';
 import styled, { createGlobalStyle } from 'styled-components';
 import { HashRouter as Router } from 'react-router-dom';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
+import { Anilist } from '../../domain/anilist/anilist';
 
 const Home = () => (
   <Router>
@@ -17,6 +18,7 @@ const Home = () => (
         </CacheRoute>
         <CacheRoute path="/">
           <h1>Welcome stranger</h1>
+          <button onClick={() => new Anilist().login()}>Login</button>
         </CacheRoute>
       </CacheSwitch>
     </Container>

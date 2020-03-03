@@ -1,4 +1,4 @@
-import { Manga } from "./manga";
+import { Manga } from "./";
 import { Status } from "./status";
 import { HttpResource } from "./http-resource";
 
