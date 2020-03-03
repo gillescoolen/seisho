@@ -7,7 +7,7 @@ let win: BrowserWindow | null;
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
 
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
@@ -20,8 +20,8 @@ const createWindow = async () => {
   }
 
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1440,
+    height: 760,
     webPreferences: {
       // FIXME: find another solution for CORS...
       webSecurity: false
@@ -46,6 +46,8 @@ const createWindow = async () => {
       win!.webContents.openDevTools();
     });
   }
+
+  win.setMenu(null);
 
   win.on('closed', () => {
     win = null;

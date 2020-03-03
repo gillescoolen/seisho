@@ -33,7 +33,7 @@ export abstract class HttpResource {
 
   protected async parseHTML(html: string): Promise<Document> {
     const parser = new DOMParser();
-    return parser.parseFromString(html, "text/html");
+    return parser.parseFromString(html, 'text/html');
   }
 
   protected async getHTMLFrom(url: string): Promise<Document> {
