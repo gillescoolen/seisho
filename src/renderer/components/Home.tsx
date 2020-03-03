@@ -3,7 +3,7 @@ import Toolbar from './Toolbar/Toolbar';
 import Overview from './Manga/Overview';
 import { hot } from 'react-hot-loader/root';
 import styled, { createGlobalStyle } from 'styled-components';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 
 const Home = () => (

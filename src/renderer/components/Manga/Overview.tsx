@@ -9,12 +9,23 @@ const Overview = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [manga, setManga] = useState<Manga[]>([]);
+  const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
-    (async function anyNameFunction() {
-      setManga(await new Mangasee().search(search, page));
+    (async () => {
+      setLoadMore(false);
+      setManga([...manga, ...await new Mangasee().search(search, page)]);
+      setPage(page + 1)
     })();
-  }, [setManga, setPage, setSearch]);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loadMore]);
+
+  async function handleScroll() {
+    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+    setLoadMore(true);
+  }
 
   return (
     <Container>
