@@ -6,8 +6,8 @@ import { MangaseeSource } from '../../../domain/mangasee/mangasee-source';
 import { Manga } from '../../../domain/manga';
 
 const Overview = () => {
+  const [search] = useState('');
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
   const [manga, setManga] = useState<Manga[]>([]);
   const [loadMore, setLoadMore] = useState(false);
 
