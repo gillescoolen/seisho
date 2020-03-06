@@ -1,26 +1,27 @@
 import React from 'react';
 import Toolbar from './Toolbar/Toolbar';
-import Overview from './Manga/Overview';
+import { Overview, Single } from './Manga';
 import { hot } from 'react-hot-loader/root';
 import styled, { createGlobalStyle } from 'styled-components';
-import { HashRouter as Router } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 
 const Home = () => (
-  <Router>
+  <HashRouter>
     <Container>
       <Toolbar />
       <GlobalStyles />
       <CacheSwitch>
+        <Route path="/manga/:title" component={Single}/>
         <CacheRoute path="/overview">
           <Overview />
         </CacheRoute>
         <CacheRoute path="/">
-          <h1>Welcome stranger</h1>
+          <h1>Welcome struggler</h1>
         </CacheRoute>
       </CacheSwitch>
     </Container>
-  </Router>
+  </HashRouter>
 );
 
 const Container = styled.div`
