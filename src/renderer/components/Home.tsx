@@ -2,8 +2,8 @@ import React from 'react';
 import Toolbar from './Toolbar/Toolbar';
 import { Overview, Single } from './Manga';
 import { hot } from 'react-hot-loader/root';
-import styled, { createGlobalStyle } from 'styled-components';
 import { HashRouter, Route } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 
 const Home = () => (
