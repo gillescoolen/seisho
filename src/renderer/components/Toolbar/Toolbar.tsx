@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import React from 'react';
-import styledComponents from "styled-components";
+import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
 const Toolbar = () => (
@@ -16,7 +16,7 @@ const Toolbar = () => (
   </Navigation>
 );
 
-const Navigation = styledComponents.nav`
+const Navigation = styled.nav`
   width: 100%;
   height: 50px;
 
