@@ -12,7 +12,7 @@ const Home = () => (
       <Toolbar />
       <GlobalStyles />
       <CacheSwitch>
-        <Route path="/manga/:title" component={Single}/>
+        <Route path="/manga/:title" component={Single} />
         <CacheRoute path="/overview">
           <Overview />
         </CacheRoute>
@@ -29,13 +29,33 @@ const Container = styled.div`
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-color: black;
+  background-color: #181b21;
 `;
 
 const GlobalStyles = createGlobalStyle`
-body {
-  margin: 0;
-  font-family: 'Arial';
-}`;
+  body {
+    margin: 0;
+    font-family: 'Arial';
+  }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    border-radius: none;
+    
+    &-track {
+      background: #141414;
+    }
+
+    &-thumb {
+      background: #262626;
+      border-radius: 0px;
+
+      &:hover {
+        background: #262626;
+        border-radius: 0px;
+      }
+    }
+  }
+`;
 
 export default hot(Home);
