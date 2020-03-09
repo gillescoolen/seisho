@@ -27,7 +27,15 @@
     ],
     "jsx-no-string-ref": true,
     "jsx-self-close": true,
-    "no-increment-decrement": false
+    "no-increment-decrement": false,
+    "import-name": [
+      true,
+      {
+        "react": "React",
+        "styledComponents": "styled",
+        "reactRouterCacheRoute": "CacheRoute"
+      }
+    ]
   },
   "rulesDirectory": []
 }
