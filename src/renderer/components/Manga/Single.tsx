@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Manga } from '../../../domain/manga';
+import { ChapterList } from '.';
 
 const Single = (props: any) => {
   const [manga] = useState<Manga>(props.location.state);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       await manga.fetchDetails();
+      setLoading(false);
     })();
-  }, [manga]);
-
-
+  }, [loading]);
   return (
     <div>
       <h1>{manga.getTitle()}</h1>
       <p>{manga.getDescription()}</p>
-      <ul>
-        {manga.getChapters().map((chapter, index) => <li key={index}>{chapter.getTitle()}</li>)}
-
-      </ul>
+      <ChapterList manga={manga} />
     </div>
   )
 };
