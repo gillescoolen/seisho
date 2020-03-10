@@ -32,7 +32,7 @@ const createEntry = async () => {
   manga.setTracker(anilist);
   manga.setTrackerMediaId(response.media[0].id);
   manga.setTrackingStatus(MediaListStatus.CURRENT);
-  await manga.sync();
+  await manga.syncToTracker();
   console.log('created');
 };
 
@@ -55,8 +55,27 @@ const updateEntry = async () => {
   manga.setTrackingStatus(MediaListStatus.PLANNING);
   manga.nextChapter();
   manga.setScore(82);
-  await manga.sync();
+  await manga.syncToTracker();
   console.log('updated');
+};
+
+const syncEntry = async () => {
+  console.log('Tower of God');
+  const results = await mangaSee.search('Tower of God', 1);
+  const manga = results[0];
+  console.log('fetchingDetails');
+  await manga.fetchDetails();
+  manga.setTracker(anilist);
+  manga.nextChapter();
+  await manga.syncFromTracker();
+};
+
+const persistProgressWithoutTracker = async () => {
+  console.log('Jojo');
+  const results = await mangaSee.search('Jojo', 1);
+  const manga = results[0];
+  await manga.fetchDetails();
+  manga.nextChapter();
 };
 
 const Home = () => (
@@ -76,6 +95,8 @@ const Home = () => (
           <button onClick={createEntry}>create entry</button>
           <button onClick={testRecoverInfo}>testRecoverInfo</button>
           <button onClick={updateEntry}>updateEntry</button>
+          <button onClick={syncEntry}>syncEntry</button>
+          <button onClick={persistProgressWithoutTracker}>persistProgressWithoutTracker</button>
         </CacheRoute>
       </CacheSwitch>
     </Container>

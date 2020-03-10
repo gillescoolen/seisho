@@ -56,6 +56,10 @@ export abstract class Manga extends HttpResource {
     return this.trackingInfo.mediaId;
   }
 
+  public getPersonalMediaId() {
+    return this.trackingInfo.personalTrackerMediaId;
+  }
+
   public setScore(score: number) {
     if (!this.tracker) {
       this.throwNotrackerError();
@@ -146,31 +150,37 @@ export abstract class Manga extends HttpResource {
 
   public abstract async fetchDetails(): Promise<void>;
 
-  public persistTrackerInfo(info: TrackingInfo) {
-    this.trackingInfo = info;
-    this.persist();
-  }
-
+  // TODO: refactor this
   protected recover() {
     const rawManga = localStorage.getItem(this.title);
-
     if (rawManga) {
       const manga = JSON.parse(rawManga) as PersistedManga;
+      console.log(manga);
+      if (manga.trackingInfo && manga.trackingInfo.personalTrackerMediaId && manga.trackingInfo.mediaId) {
+        this.trackingInfo.personalTrackerMediaId = manga.trackingInfo.personalTrackerMediaId;
+        this.trackingInfo.mediaId = manga.trackingInfo.mediaId;
+        this.trackingInfo.score = manga.trackingInfo.score;
+        this.trackingInfo.status = manga.trackingInfo.status;
+      }
 
-      this.trackingInfo.personalTrackerMediaId = manga.trackingInfo.personalTrackerMediaId;
-      this.trackingInfo.mediaId = manga.trackingInfo.mediaId;
-      this.trackingInfo.score = manga.trackingInfo.score;
-      this.trackingInfo.status = manga.trackingInfo.status;
       this.currentChapter = manga.progress;
     }
   }
 
+  // TODO: refactor this function
   private persist() {
-    const data: PersistedManga = {
-      progress: this.getProgress(),
-      trackingInfo: this.trackingInfo
-    };
-    localStorage.setItem(this.title, JSON.stringify(data));
+    if (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0) {
+      const data: Partial<PersistedManga> = {
+        progress: this.getProgress()
+      };
+      localStorage.setItem(this.title, JSON.stringify(data));
+    } else {
+      const data: PersistedManga = {
+        progress: this.getProgress(),
+        trackingInfo: this.trackingInfo
+      };
+      localStorage.setItem(this.title, JSON.stringify(data));
+    }
   }
 
   public getCurrentChapter() {
@@ -195,7 +205,7 @@ export abstract class Manga extends HttpResource {
     this.persist();
   }
 
-  public async sync() {
+  public async syncToTracker() {
     await this.tracker?.updateEntry(this, {
       progress: this.getProgress(),
       scoreRaw: this.getScore(),
@@ -203,8 +213,19 @@ export abstract class Manga extends HttpResource {
     });
   }
 
+  public async syncFromTracker() {
+    await this.tracker?.retrieveEntry(this);
+  }
+
   private throwNotrackerError() {
     throw new Error('Bind a tracker first');
+  }
+
+  recoverFromTracker(persistedManga: Partial<PersistedManga>) {
+    this.currentChapter = persistedManga.progress ?? this.currentChapter;
+    this.trackingInfo = persistedManga!.trackingInfo!;
+
+    this.persist();
   }
 }
 

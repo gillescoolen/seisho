@@ -167,11 +167,57 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
 
     const saveMediaListEntry = (await response.json()).data.SaveMediaListEntry as Partial<SaveMediaListEntry>;
 
-    manga.persistTrackerInfo({
-      mediaId: variables!.mediaId!,
-      personalTrackerMediaId: saveMediaListEntry!.id!,
-      score: saveMediaListEntry!.score!,
-      status: saveMediaListEntry!.status!
+    manga.recoverFromTracker({
+      trackingInfo: {
+        mediaId: variables!.mediaId!,
+        personalTrackerMediaId: saveMediaListEntry!.id!,
+        score: saveMediaListEntry!.score!,
+        status: saveMediaListEntry!.status!
+      }
+    });
+  }
+
+  public async retrieveEntry(manga: Manga) {
+    const query = `
+    query ($mediaId: Int, $id: Int) {
+      Page {
+           mediaList (mediaId: $mediaId, id: $id) {
+            id
+            status
+            score(format: POINT_100)
+            progress
+        }
+      }
+}`;
+
+    const variables = {
+      id: manga.getPersonalMediaId(),
+      mediaId: manga.getTrackerMediaId()
+    };
+
+    const response = await fetch(this.baseUrl, {
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ query, variables }),
+      method: 'post'
+    });
+
+    if (!response.ok) {
+      throw new Error('Something went wrong');
+    }
+    const saveMediaListEntry = (await response.json()).data.Page.mediaList[0] as Partial<SaveMediaListEntry>;
+
+    manga.recoverFromTracker({
+      progress: saveMediaListEntry!.progress!,
+      trackingInfo: {
+        mediaId: variables!.mediaId!,
+        personalTrackerMediaId: saveMediaListEntry!.id!,
+        score: saveMediaListEntry!.score!,
+        status: saveMediaListEntry!.status!
+      }
     });
   }
 }
