@@ -1,9 +1,9 @@
 import Cover from "./Cover";
 import styled from "styled-components";
 import { hot } from 'react-hot-loader/root';
-import { Manga } from '../../../domain/manga';
 import React, { useEffect, useState } from 'react';
-import { MangaseeSource } from '../../../domain/mangasee/mangasee-source';
+import { Manga } from '../../../domain/manga/manga';
+import { MangaseeSource } from '../../../domain/manga/mangasee/mangasee-source';
 
 const Overview = () => {
   const [search] = useState('');

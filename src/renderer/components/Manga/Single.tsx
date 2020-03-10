@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
-import { Manga } from '../../../domain/manga';
 import { ChapterList } from '.';
+import { Manga } from '../../../domain/manga/manga';
 
 const Single = (props: any) => {
   const [manga] = useState<Manga>(props.location.state);

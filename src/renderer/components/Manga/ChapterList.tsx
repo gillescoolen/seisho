@@ -1,7 +1,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
-import { Manga } from '../../../domain/manga';
 import Spinner from '../UI/Spinner';
+import { Manga } from '../../../domain/manga/manga';
 
 const ChapterList = (props: { manga: Manga }) => {
   if (props.manga.getChapters().length === 0) {
