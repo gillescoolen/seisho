@@ -1,5 +1,5 @@
-import { Manga } from "../manga";
-import { MangaseeChapter } from "./mangasee-chapter";
+import { Manga } from '../manga';
+import { MangaseeChapter } from './mangasee-chapter';
 
 export class MangaseeManga extends Manga {
   public async fetchDetails() {
@@ -9,6 +9,8 @@ export class MangaseeManga extends Manga {
 
     this.chapters = [...document.querySelectorAll<HTMLLinkElement>('.list-group-item')]
       .map(chapterElement => this.buildChapter(chapterElement));
+
+    this.recoverTrackerInfo();
   }
 
   private buildChapter(chapterElement: HTMLLinkElement): MangaseeChapter {

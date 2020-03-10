@@ -1,5 +1,6 @@
 import electron from 'electron';
-import { AniListSearchParams, AniListSearchResponse } from './types';
+import { AniListSearchParams, AniListSearchResponse, MediaListStatus, SaveMediaListEntry } from './types';
+import { Manga } from '../manga/manga';
 
 export class AniList {
   private accessToken = '';
@@ -43,7 +44,7 @@ export class AniList {
         }
       });
 
-      authWindow.loadURL(`https://anilist.co/api/v2/oauth/authorize?client_id=3223&response_type=token`);
+      authWindow.loadURL(`https://anilist.co/api/v2/oauth/authorize?client_id=3245&response_type=token`);
 
       authWindow.show();
 
@@ -128,5 +129,42 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     }
 
     return result[0];
+  }
+
+  public async createEntry(manga: Manga, mediaId: number, status: MediaListStatus) {
+    const query = `
+    mutation ($mediaId: Int, $status: MediaListStatus) {
+    SaveMediaListEntry (mediaId: $mediaId, status: $status) {
+        id
+        status
+    }
+}`;
+
+    const variables: Partial<SaveMediaListEntry> = {
+      mediaId,
+      status
+    };
+
+    const response = await fetch(this.baseUrl, {
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ query, variables }),
+      method: 'post'
+    });
+
+    if (!response.ok) {
+      // TODO: send different errors on different scenarios
+      throw new Error('Something went wrong');
+    }
+
+    const saveMediaListEntry = (await response.json()).data.SaveMediaListEntry as Partial<SaveMediaListEntry>;
+
+    manga.persistTrackerInfo({
+      mediaId,
+      personalTrackerMediaId: saveMediaListEntry!.id!
+    });
   }
 }
