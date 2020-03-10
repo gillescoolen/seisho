@@ -5,12 +5,19 @@ import { hot } from 'react-hot-loader/root';
 import { HashRouter, Route } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
-import { Anilist } from '../../domain/anilist/anilist';
+import { AniList } from '../../domain/anilist/anilist';
+
+const anilist = new AniList();
 
 const anilistLogin = async () => {
-  await new Anilist().login();
+  await anilist.login();
   // Maybe have a snackbar or something pop up. looks fancier.
   alert('successfully logged in!');
+};
+
+const search = async () => {
+  const response = await anilist.search('gal gohan', 1);
+  console.log(response);
 };
 
 const Home = () => (
@@ -26,6 +33,7 @@ const Home = () => (
         <CacheRoute path="/">
           <h1>Welcome struggler</h1>
           <button onClick={anilistLogin}>Login</button>
+          <button onClick={search}>Search</button>
         </CacheRoute>
       </CacheSwitch>
     </Container>

@@ -1,0 +1,62 @@
+// See https://anilist.github.io/ApiV2-GraphQL-Docs/
+
+export interface AniListSearchParams {
+  search: string;
+  page: number;
+  perPage: number;
+}
+
+export interface AniListSearchResponse {
+  media: AniListMedia[];
+  pageInfo: AniListPageInfo
+}
+
+export interface AniListMedia {
+  id: number;
+  coverImage: AniListMediaCoverImage;
+  description: string;
+  startDate: AnilistDate;
+  status: AniListMediaStatus;
+  title: AniListMediaTitle;
+  type: AniListMediaType;
+  chapters: number | null;
+}
+
+export enum AniListMediaType {
+  MANGA = 'MANGA',
+  ANIME = 'ANIME'
+}
+
+export interface AniListMediaTitle {
+  romanji: string;
+  english: string;
+  native: string;
+}
+
+export interface AniListMediaCoverImage {
+  large: string;
+  extraLarge: string;
+  medium: string;
+  color: string;
+}
+
+export interface AnilistDate {
+  year: number;
+  month: number;
+  day: number;
+}
+
+export interface AniListPageInfo {
+  currentPage: number;
+  hasNextPage: boolean;
+  lastPage: number;
+  perPage: number;
+  total: number;
+}
+
+export enum AniListMediaStatus {
+  FINISHED = 'FINISHED',
+  RELEASING = 'RELEASING',
+  NOT_YET_RELEASED = 'NOT_YET_RELEASED',
+  CANCELLED = 'CANCELLED'
+}

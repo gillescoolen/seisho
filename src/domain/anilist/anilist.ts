@@ -1,12 +1,14 @@
 import electron from 'electron';
+import { AniListSearchParams, AniListSearchResponse } from './types';
 
-export class Anilist {
+export class AniList {
   private accessToken = '';
 
   private static readonly ANILIST_PERSIST_KEY = 'anilist-accesstoken';
+  private readonly baseUrl = 'https://graphql.anilist.co';
 
   constructor() {
-    const accessToken = localStorage.getItem(Anilist.ANILIST_PERSIST_KEY);
+    const accessToken = localStorage.getItem(AniList.ANILIST_PERSIST_KEY);
 
     if (accessToken) {
       this.accessToken = accessToken;
@@ -51,13 +53,71 @@ export class Anilist {
     });
   }
 
+  public async search(name: string, pageNumber: number): Promise<AniListSearchResponse> {
+    const query = `
+query ($id: Int, $page: Int, $perPage: Int, $search: String) {
+  Page (page: $page, perPage: $perPage) {
+    pageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+      perPage
+    }
+    media (id: $id, search: $search, type: MANGA) {
+      id
+      title {
+        romaji
+        english
+        native
+      }
+      coverImage {
+        large
+      }
+      type
+      status
+      chapters
+      description
+      startDate {
+        year
+        month
+        day
+      }
+    }
+  }
+}
+`;
+
+    const variables: AniListSearchParams = {
+      search: name,
+      page: pageNumber,
+      perPage: 50
+    };
+
+    const response = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query, variables })
+    });
+
+    if (!response.ok) {
+      // TODO: send different errors on different scenarios
+      throw new Error('Something went wrong');
+    }
+
+    return (await response.json()).data.Page as AniListSearchResponse;
+  }
+
   private processAccessToken(urlWithToken: string) {
     this.accessToken = this.extractAccessTokenFromUrl(urlWithToken);
     this.persistAccessToken(this.accessToken);
   }
 
   private persistAccessToken(token: string) {
-    localStorage.setItem(Anilist.ANILIST_PERSIST_KEY, token);
+    localStorage.setItem(AniList.ANILIST_PERSIST_KEY, token);
   }
 
   private extractAccessTokenFromUrl(urlWithToken: string): string {
