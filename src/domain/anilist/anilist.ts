@@ -22,7 +22,7 @@ export class AniList {
         height: 600,
         modal: true,
         parent: electron.remote.getCurrentWindow(),
-        show: false,
+        show: false
       });
 
       authWindow.webContents.on('dom-ready', () => {
@@ -32,7 +32,7 @@ export class AniList {
 
         const url = authWindow.webContents.getURL();
 
-        if (url.includes("pin")) {
+        if (url.includes('pin')) {
           authWindow.close();
           try {
             this.processAccessToken(url);
@@ -64,7 +64,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
       hasNextPage
       perPage
     }
-    media (id: $id, search: $search, type: MANGA) {
+    media (id: $id, search: $search, type: MANGA, format_not_in: [NOVEL]) {
       id
       title {
         romaji
@@ -86,7 +86,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     }
   }
 }
-`;
+`.trim();
 
     const variables: AniListSearchParams = {
       search: name,
@@ -98,7 +98,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({ query, variables })
     });
