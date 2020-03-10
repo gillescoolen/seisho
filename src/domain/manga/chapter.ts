@@ -1,4 +1,4 @@
-import { HttpResource } from "./http-resource";
+import { HttpResource } from './http-resource';
 
 export abstract class Chapter extends HttpResource {
   private title: string = '';
@@ -8,12 +8,16 @@ export abstract class Chapter extends HttpResource {
   protected firstPage: number = 0;
   protected lastPage: number = 0;
 
-  protected currentPage: number = 1;
+  protected currentPage: number = 0;
 
   protected pages: string[] = [];
 
   public getCurrentPage() {
     return this.pages[this.currentPage];
+  }
+
+  public completed() {
+    return this.currentPage > this.pages.length;
   }
 
   public setTitle(title: string) {

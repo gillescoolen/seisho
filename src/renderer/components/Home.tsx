@@ -29,10 +29,10 @@ const createEntry = async () => {
   const manga = results[0];
   console.log(manga);
   const response = await anilist.search('Tower of God', 1);
-  manga.setMediaId(response.media[0].id);
-  await anilist.createEntry(manga, {
-    status: MediaListStatus.CURRENT
-  });
+  manga.setTracker(anilist);
+  manga.setTrackerMediaId(response.media[0].id);
+  manga.setTrackingStatus(MediaListStatus.CURRENT);
+  await manga.sync();
   console.log('created');
 };
 
@@ -51,11 +51,11 @@ const updateEntry = async () => {
   const manga = results[0];
   console.log('fetchingDetails');
   await manga.fetchDetails();
-  console.log(manga);
-  await anilist.updateEntry(manga, {
-    progress: 100,
-    scoreRaw: 90
-  });
+  manga.setTracker(anilist);
+  manga.setScore(82);
+  manga.nextChapter();
+  manga.setTrackingStatus(MediaListStatus.PLANNING);
+  await manga.sync();
   console.log('updated');
 };
 

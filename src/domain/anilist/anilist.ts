@@ -145,7 +145,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
 }`;
 
     const variables: Partial<SaveMediaListEntry> = {
-      mediaId: manga.getMediaId(),
+      mediaId: manga.getTrackerMediaId(),
       ...entryData
     };
 
@@ -168,7 +168,9 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
 
     manga.persistTrackerInfo({
       mediaId: variables!.mediaId!,
-      personalTrackerMediaId: saveMediaListEntry!.id!
+      personalTrackerMediaId: saveMediaListEntry!.id!,
+      score: saveMediaListEntry!.scoreRaw!,
+      status: saveMediaListEntry!.status!
     });
   }
 }
