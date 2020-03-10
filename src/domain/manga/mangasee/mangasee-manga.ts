@@ -10,7 +10,7 @@ export class MangaseeManga extends Manga {
     this.chapters = [...document.querySelectorAll<HTMLLinkElement>('.list-group-item')]
       .map(chapterElement => this.buildChapter(chapterElement));
 
-    this.recoverTrackerInfo();
+    this.recover();
   }
 
   private buildChapter(chapterElement: HTMLLinkElement): MangaseeChapter {

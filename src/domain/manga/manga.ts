@@ -1,6 +1,8 @@
 import { Status } from './status';
 import { HttpResource } from './http-resource';
 import { Chapter } from './chapter';
+import { MediaListStatus } from '../anilist/types';
+import { AniList } from '../anilist/anilist';
 
 export abstract class Manga extends HttpResource {
   private title: string = '';
@@ -13,15 +15,85 @@ export abstract class Manga extends HttpResource {
   protected detailsLink: string = '';
   protected chapters: Chapter[] = [];
 
-  protected mediaId: number = 0;
-  protected personalTrackerMediaId: number = 0;
+  protected trackingInfo: TrackingInfo = {
+    mediaId: 0,
+    personalTrackerMediaId: 0,
+    score: 0,
+    status: MediaListStatus.PLANNING
+  };
+
+  private tracker: AniList | null = null;
+
+  public setTracker(tracker: AniList | null) {
+    this.tracker = tracker;
+  }
+
+  private currentChapter: number = 0;
+
+  public getProgress() {
+    return this.currentChapter;
+  }
 
   public getTitle(): string {
     return this.title;
   }
 
+  public setTrackerMediaId(mediaId: number) {
+    if (!this.tracker) {
+      this.throwNotrackerError();
+    }
+
+    this.trackingInfo.mediaId = mediaId;
+
+    this.persist();
+  }
+
+  public getTrackerMediaId() {
+    if (!this.tracker) {
+      this.throwNotrackerError();
+    }
+
+    return this.trackingInfo.mediaId;
+  }
+
+  public getPersonalMediaId() {
+    return this.trackingInfo.personalTrackerMediaId;
+  }
+
+  public setScore(score: number) {
+    if (!this.tracker) {
+      this.throwNotrackerError();
+    }
+
+    this.trackingInfo.score = score;
+
+    this.persist();
+  }
+
+  public getScore() {
+    return this.trackingInfo.score;
+  }
+
   public setTitle(value: string) {
     this.title = value;
+  }
+
+  public setTrackingStatus(trackingStatus: MediaListStatus) {
+    if (!this.tracker) {
+      this.throwNotrackerError();
+    }
+
+    this.trackingInfo.status = trackingStatus;
+
+    this.persist();
+  }
+
+  public getTrackingStatus() {
+    if (!this.tracker) {
+      this.throwNotrackerError();
+    }
+
+    return this.trackingInfo.status;
   }
 
   public getAuthor(): string {
@@ -78,23 +150,93 @@ export abstract class Manga extends HttpResource {
 
   public abstract async fetchDetails(): Promise<void>;
 
-  public persistTrackerInfo(info: TrackingInfo) {
-    localStorage.setItem(this.title, JSON.stringify(info));
-  }
+  // TODO: refactor this
+  protected recover() {
+    const rawManga = localStorage.getItem(this.title);
+    if (rawManga) {
+      const manga = JSON.parse(rawManga) as PersistedManga;
+      console.log(manga);
+      if (manga.trackingInfo && manga.trackingInfo.personalTrackerMediaId && manga.trackingInfo.mediaId) {
+        this.trackingInfo.personalTrackerMediaId = manga.trackingInfo.personalTrackerMediaId;
+        this.trackingInfo.mediaId = manga.trackingInfo.mediaId;
+        this.trackingInfo.score = manga.trackingInfo.score;
+        this.trackingInfo.status = manga.trackingInfo.status;
+      }
 
-  protected recoverTrackerInfo() {
-    const rawInfo = localStorage.getItem(this.title);
-
-    if (rawInfo) {
-      const info = JSON.parse(rawInfo) as TrackingInfo;
-
-      this.personalTrackerMediaId = info.personalTrackerMediaId;
-      this.mediaId = info.mediaId;
+      this.currentChapter = manga.progress;
     }
   }
+
+  // TODO: refactor this function
+  private persist() {
+    if (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0) {
+      const data: Partial<PersistedManga> = {
+        progress: this.getProgress()
+      };
+      localStorage.setItem(this.title, JSON.stringify(data));
+    } else {
+      const data: PersistedManga = {
+        progress: this.getProgress(),
+        trackingInfo: this.trackingInfo
+      };
+      localStorage.setItem(this.title, JSON.stringify(data));
+    }
+  }
+
+  public getCurrentChapter() {
+    return this.chapters[this.currentChapter];
+  }
+
+  public nextChapter() {
+    if (this.chapters.length === 0) {
+      throw new Error('Cannot paginate on that has no chapters');
+    }
+
+    this.currentChapter++;
+    this.persist();
+  }
+
+  public previousChapter() {
+    if (this.chapters.length === 0) {
+      throw new Error('Cannot paginate on that has no chapters');
+    }
+
+    this.currentChapter--;
+    this.persist();
+  }
+
+  public async syncToTracker() {
+    await this.tracker?.updateEntry(this, {
+      progress: this.getProgress(),
+      scoreRaw: this.getScore(),
+      status: this.getTrackingStatus()
+    });
+  }
+
+  public async syncFromTracker() {
+    await this.tracker?.retrieveEntry(this);
+  }
+
+  private throwNotrackerError() {
+    throw new Error('Bind a tracker first');
+  }
+
+  recoverFromTracker(persistedManga: Partial<PersistedManga>) {
+    this.currentChapter = persistedManga.progress ?? this.currentChapter;
+    this.trackingInfo = persistedManga!.trackingInfo!;
+
+    this.persist();
+  }
+}
+
+export interface PersistedManga {
+  progress: number;
+  trackingInfo: TrackingInfo;
 }
 
 export interface TrackingInfo {
   mediaId: number;
   personalTrackerMediaId: number;
+  score?: number;
+  status: MediaListStatus;
 }
