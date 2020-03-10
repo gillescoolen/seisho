@@ -1,13 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
-import { Manga } from '../../../domain/manga/manga';
+import { Manga } from '../../../domain/manga';
+import { Link } from "react-router-dom";
 
 const Cover = (props: { manga: Manga }) => {
   return (
-    <StyledManga manga={props.manga}>
-      <Title>{props.manga.getTitle()}</Title>
-    </StyledManga>)
+    <Link to={{ pathname: props.manga.getDetailsLink(), state: props.manga }}>
+      <StyledManga manga={props.manga}>
+        <Title>{props.manga.getTitle()}</Title>
+      </StyledManga>
+    </Link>
+  )
 };
 
 const StyledManga = styled.div`

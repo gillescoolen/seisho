@@ -57,6 +57,10 @@ export abstract class Manga extends HttpResource {
     return this.status;
   }
 
+  public getDetailsLink(): string {
+    return this.detailsLink;
+  }
+
   public setDetailsLink(link: string) {
     this.detailsLink = link;
   }

@@ -47,7 +47,7 @@ export class MangaseeSource extends MangaSource {
       const statusElement = requestedElement.querySelector<HTMLLinkElement>('p:nth-child(3) > a:nth-child(1)');
 
       const manga = new MangaseeManga(this.baseUri);
-      console.log(titleElement?.href);
+
       manga.setDetailsLink(this.parseUri(titleElement?.href || ''));
       manga.setTitle(titleElement?.textContent || '');
       manga.setThumbnailUrl(imageElement?.src || '');
