@@ -52,9 +52,9 @@ const updateEntry = async () => {
   console.log('fetchingDetails');
   await manga.fetchDetails();
   manga.setTracker(anilist);
-  manga.setScore(82);
-  manga.nextChapter();
   manga.setTrackingStatus(MediaListStatus.PLANNING);
+  manga.nextChapter();
+  manga.setScore(82);
   await manga.sync();
   console.log('updated');
 };

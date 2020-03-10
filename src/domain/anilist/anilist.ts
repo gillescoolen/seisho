@@ -141,6 +141,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     SaveMediaListEntry (mediaId: $mediaId, status: $status, scoreRaw: $scoreRaw, progress: $progress) {
         id
         status
+        score(format: POINT_100)
     }
 }`;
 
@@ -169,7 +170,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     manga.persistTrackerInfo({
       mediaId: variables!.mediaId!,
       personalTrackerMediaId: saveMediaListEntry!.id!,
-      score: saveMediaListEntry!.scoreRaw!,
+      score: saveMediaListEntry!.score!,
       status: saveMediaListEntry!.status!
     });
   }

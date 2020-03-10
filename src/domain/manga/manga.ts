@@ -147,11 +147,8 @@ export abstract class Manga extends HttpResource {
   public abstract async fetchDetails(): Promise<void>;
 
   public persistTrackerInfo(info: TrackingInfo) {
-    const persistedManga: PersistedManga = {
-      progress: this.currentChapter,
-      trackingInfo: info
-    };
-    localStorage.setItem(this.title, JSON.stringify(persistedManga));
+    this.trackingInfo = info;
+    this.persist();
   }
 
   protected recover() {
@@ -169,14 +166,11 @@ export abstract class Manga extends HttpResource {
   }
 
   private persist() {
-    const rawManga = localStorage.getItem(this.title);
-
-    if (rawManga) {
-      const manga = JSON.parse(rawManga) as PersistedManga;
-      manga.progress = this.currentChapter;
-      manga.trackingInfo = this.trackingInfo;
-      localStorage.setItem(this.title, JSON.stringify(manga));
-    }
+    const data: PersistedManga = {
+      progress: this.getProgress(),
+      trackingInfo: this.trackingInfo
+    };
+    localStorage.setItem(this.title, JSON.stringify(data));
   }
 
   public getCurrentChapter() {
@@ -222,6 +216,6 @@ export interface PersistedManga {
 export interface TrackingInfo {
   mediaId: number;
   personalTrackerMediaId: number;
-  score: number;
+  score?: number;
   status: MediaListStatus;
 }
