@@ -1,5 +1,5 @@
 import electron from 'electron';
-import { AniListSearchParams, AniListSearchResponse, MediaListStatus, SaveMediaListEntry } from './types';
+import { AniListSearchParams, AniListSearchResponse, SaveMediaListEntry } from './types';
 import { Manga } from '../manga/manga';
 
 export class AniList {
@@ -131,18 +131,22 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     return result[0];
   }
 
-  public async createEntry(manga: Manga, mediaId: number, status: MediaListStatus) {
+  public async createEntry(manga: Manga, entryData: Partial<SaveMediaListEntry>) {
+    return this.updateEntry(manga, entryData);
+  }
+
+  public async updateEntry(manga: Manga, entryData: Partial<SaveMediaListEntry>) {
     const query = `
-    mutation ($mediaId: Int, $status: MediaListStatus) {
-    SaveMediaListEntry (mediaId: $mediaId, status: $status) {
+    mutation ($mediaId: Int, $status: MediaListStatus, $scoreRaw: Int, $progress: Int) {
+    SaveMediaListEntry (mediaId: $mediaId, status: $status, scoreRaw: $scoreRaw, progress: $progress) {
         id
         status
     }
 }`;
 
     const variables: Partial<SaveMediaListEntry> = {
-      mediaId,
-      status
+      mediaId: manga.getMediaId(),
+      ...entryData
     };
 
     const response = await fetch(this.baseUrl, {
@@ -163,7 +167,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     const saveMediaListEntry = (await response.json()).data.SaveMediaListEntry as Partial<SaveMediaListEntry>;
 
     manga.persistTrackerInfo({
-      mediaId,
+      mediaId: variables!.mediaId!,
       personalTrackerMediaId: saveMediaListEntry!.id!
     });
   }

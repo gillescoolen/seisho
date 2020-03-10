@@ -20,6 +20,18 @@ export abstract class Manga extends HttpResource {
     return this.title;
   }
 
+  public setMediaId(mediaId: number) {
+    this.mediaId = mediaId;
+  }
+
+  public getMediaId() {
+    return this.mediaId;
+  }
+
+  public getPersonalTrackerMediaId() {
+    return this.personalTrackerMediaId;
+  }
+
   public setTitle(value: string) {
     this.title = value;
   }

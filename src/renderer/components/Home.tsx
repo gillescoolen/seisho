@@ -29,8 +29,11 @@ const createEntry = async () => {
   const manga = results[0];
   console.log(manga);
   const response = await anilist.search('Tower of God', 1);
-  await anilist.createEntry(manga, response.media[0].id, MediaListStatus.CURRENT);
-  // TODO: maybe show message that it has been created..
+  manga.setMediaId(response.media[0].id);
+  await anilist.createEntry(manga, {
+    status: MediaListStatus.CURRENT
+  });
+  console.log('created');
 };
 
 const testRecoverInfo = async () => {
@@ -40,6 +43,20 @@ const testRecoverInfo = async () => {
   console.log('fetchingDetails');
   await manga.fetchDetails();
   console.log(manga);
+};
+
+const updateEntry = async () => {
+  console.log('Tower of God');
+  const results = await mangaSee.search('Tower of God', 1);
+  const manga = results[0];
+  console.log('fetchingDetails');
+  await manga.fetchDetails();
+  console.log(manga);
+  await anilist.updateEntry(manga, {
+    progress: 100,
+    scoreRaw: 90
+  });
+  console.log('updated');
 };
 
 const Home = () => (
@@ -58,6 +75,7 @@ const Home = () => (
           <button onClick={search}>Search</button>
           <button onClick={createEntry}>create entry</button>
           <button onClick={testRecoverInfo}>testRecoverInfo</button>
+          <button onClick={updateEntry}>updateEntry</button>
         </CacheRoute>
       </CacheSwitch>
     </Container>
