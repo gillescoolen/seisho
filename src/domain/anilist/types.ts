@@ -60,3 +60,31 @@ export enum AniListMediaStatus {
   NOT_YET_RELEASED = 'NOT_YET_RELEASED',
   CANCELLED = 'CANCELLED'
 }
+
+export enum MediaListStatus {
+  CURRENT = 'CURRENT',
+  PLANNING = 'PLANNING',
+  COMPLETED = 'COMPLETED',
+  DROPPED = 'DROPPED',
+  PAUSED = 'PAUSED',
+  REPEATING = 'REPEATING'
+}
+
+export interface SaveMediaListEntry {
+  id: number;
+  mediaId: number;
+  status: MediaListStatus;
+  score: number;
+  scoreRaw: number;
+  progress: number;
+  progressVolumes: number; // Not used!
+  repeat: number;
+  priority: number;
+  private: boolean;
+  notes: string;
+  hiddenFromStatusLists: boolean;
+  customLists: string[]; // not used.
+  advancedScores: number[]; // not used
+  startedAt: AnilistDate;
+  completedAt: AnilistDate;
+}

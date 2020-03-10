@@ -1,6 +1,6 @@
-import { Status } from "./status";
-import { HttpResource } from "./http-resource";
-import { Chapter } from "./chapter";
+import { Status } from './status';
+import { HttpResource } from './http-resource';
+import { Chapter } from './chapter';
 
 export abstract class Manga extends HttpResource {
   private title: string = '';
@@ -12,6 +12,9 @@ export abstract class Manga extends HttpResource {
   private status: Status = Status.UNKNOWN;
   protected detailsLink: string = '';
   protected chapters: Chapter[] = [];
+
+  protected mediaId: number = 0;
+  protected personalTrackerMediaId: number = 0;
 
   public getTitle(): string {
     return this.title;
@@ -74,4 +77,24 @@ export abstract class Manga extends HttpResource {
   }
 
   public abstract async fetchDetails(): Promise<void>;
+
+  public persistTrackerInfo(info: TrackingInfo) {
+    localStorage.setItem(this.title, JSON.stringify(info));
+  }
+
+  protected recoverTrackerInfo() {
+    const rawInfo = localStorage.getItem(this.title);
+
+    if (rawInfo) {
+      const info = JSON.parse(rawInfo) as TrackingInfo;
+
+      this.personalTrackerMediaId = info.personalTrackerMediaId;
+      this.mediaId = info.mediaId;
+    }
+  }
+}
+
+export interface TrackingInfo {
+  mediaId: number;
+  personalTrackerMediaId: number;
 }
