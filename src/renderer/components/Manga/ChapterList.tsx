@@ -6,7 +6,7 @@ import { Manga } from '../../../domain/manga/manga';
 const ChapterList = (props: { manga: Manga }) => {
   return (
     <List>
-      {props.manga.getChapters().reverse().map((chapter, index) => <li key={index}>{chapter.getTitle()}</li>)}
+      {props.manga.getChapters().map((chapter, index) => <li key={index}>{chapter.getTitle()}</li>)}
     </List>
   )
 };
@@ -14,11 +14,9 @@ const ChapterList = (props: { manga: Manga }) => {
 const List = styled.ul`
   padding: 0;
   list-style: none;
-  border: 3px solid blue;
 
   li {
     padding: 0.5rem;
-    border: 1px solid green;
   }
 `;
 

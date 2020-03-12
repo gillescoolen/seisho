@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
 import { Manga } from '../../../domain/manga/manga';
-import { CSSTransition } from "react-transition-group";
 
 const Single = (props: any) => {
   const [manga] = useState<Manga>(props.location.state);
@@ -19,9 +18,7 @@ const Single = (props: any) => {
 
   return (
     <Container>
-      <CSSTransition in={!loading} timeout={200} classNames="fade">
-        <Info manga={manga} />
-      </CSSTransition>
+      <Info manga={manga} />
       <Chapters>
         <ChapterList manga={manga} />
       </Chapters>
@@ -43,6 +40,7 @@ const Container = styled.div`
   .fade-enter {
     opacity: 0;
   }
+
   .fade-enter-active {
     opacity: 1;
     transition: opacity 300ms;
