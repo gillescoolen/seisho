@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from "react-router-dom";
 import { hot } from 'react-hot-loader/root';
-import { Link } from "react-router-dom";
-import { Manga } from '../../../domain/manga';
+import { Manga } from '../../../domain/manga/manga';
 
 const Cover = (props: { manga: Manga }) => {
   return (

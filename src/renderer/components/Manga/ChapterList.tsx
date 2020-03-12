@@ -1,17 +1,9 @@
 import React from 'react';
-import { hot } from 'react-hot-loader/root';
-import Spinner from '../UI/Spinner';
 import styled from 'styled-components';
+import { hot } from 'react-hot-loader/root';
 import { Manga } from '../../../domain/manga/manga';
 
 const ChapterList = (props: { manga: Manga }) => {
-  if (props.manga.getChapters().length === 0) {
-    return (
-      <div>
-        <Spinner/>
-      </div>
-    )
-  }
   return (
     <List>
       {props.manga.getChapters().reverse().map((chapter, index) => <li key={index}>{chapter.getTitle()}</li>)}
