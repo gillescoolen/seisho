@@ -29,6 +29,8 @@ export class MangaseeSource extends MangaSource {
     const formData = new FormData();
     formData.set('keyword', name);
     formData.set('page', pageNumber.toString());
+    formData.set('sortBy', 'popularity');
+    formData.set('sortOrder', 'descending');
 
     const html = await this.postForm<string>(`${this.baseUri}/search/request.php`, formData);
     const document = await this.parseHTML(html);

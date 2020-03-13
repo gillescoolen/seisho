@@ -36,10 +36,8 @@ const Overview = () => {
 
 const Container = styled.div`
   display: grid;
-  padding: 1rem;
-  grid-gap: 25px;
-  place-items: center;
-  justify-content: space-evenly;
+  grid-gap: 20px;
+  place-content: center;
   grid-template-columns: repeat(auto-fit, 250px);
 `;
 
