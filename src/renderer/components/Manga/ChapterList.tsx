@@ -2,14 +2,22 @@ import React from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import { Manga } from '../../../domain/manga/manga';
+import { Link } from 'react-router-dom';
 
 const ChapterList = (props: { manga: Manga }) => {
   return (
     <List>
       <Filters>Filters</Filters>
-      {props.manga.getChapters().map((chapter, index) => <Chapter key={index}> {chapter.getTitle()}</Chapter>)}
+      {props.manga.getChapters().map((chapter, index) => (
+        <Chapter
+          to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state:{ chapter, manga: props.manga} }}
+          key={index}
+        >
+          {chapter.getTitle()}
+        </Chapter>
+      ))}
     </List>
-  )
+  );
 };
 
 const Filters = styled.div`
@@ -26,8 +34,12 @@ const List = styled.ul`
   border: 5px solid #1d2c42;
 `;
 
-const Chapter = styled.li`
+const Chapter = styled(Link)`
+  color: white;
   padding: 1rem;
+  display: block;
+  border-radius: 3px;
+  text-decoration: none;
   border-bottom: 1px solid #2a3442;
 
   &:hover {

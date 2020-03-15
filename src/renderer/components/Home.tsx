@@ -1,4 +1,5 @@
 import React from 'react';
+import Reader from './Reader/Reader';
 import Toolbar from './Toolbar/Toolbar';
 import { Overview, Single } from './Manga';
 import { hot } from 'react-hot-loader/root';
@@ -84,6 +85,7 @@ const Home = () => (
       <Toolbar/>
       <GlobalStyles/>
       <CacheSwitch>
+        <Route path="/manga/reader/:title" component={Reader} />
         <Route path="/manga/:title" component={Single} />
         <CacheRoute path="/overview">
           <Overview/>
