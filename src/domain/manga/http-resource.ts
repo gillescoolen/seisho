@@ -1,17 +1,27 @@
 export abstract class HttpResource {
   protected readonly baseUri: string;
+  private abortController: AbortController;
 
   constructor(baseUri: string) {
     this.baseUri = baseUri;
+    this.abortController = new AbortController();
   }
 
   protected async postForm<T>(url: string, formData: FormData) {
     const response = await fetch(url, {
       body: formData,
       method: 'post',
+      signal: this.abortController.signal
     });
 
     return await this.processResponse<T>(response);
+  }
+
+  /**
+   * Aborts the fetch request.
+   */
+  public abortRequest() {
+    this.abortController.abort();
   }
 
   private async processResponse<T>(response: Response): Promise<T | string> {
@@ -21,10 +31,10 @@ export abstract class HttpResource {
     }
 
     if (response.headers.get('Content-Type')?.includes('application/json')) {
-      return await response.json() as T
+      return (await response.json()) as T;
     }
 
-    return await response.text()
+    return await response.text();
   }
 
   protected async getRawHTML(url: string): Promise<string> {
@@ -41,8 +51,6 @@ export abstract class HttpResource {
   }
 
   protected parseUri(url: string): string {
-    return url
-      .replace(/^[a-z]{4,5}:\/{2}[a-z]+:[0-9]{1,4}.(.*)/, '$1')
-      .replace('file:///C:/','');
+    return url.replace(/^[a-z]{4,5}:\/{2}[a-z]+:[0-9]{1,4}.(.*)/, '$1').replace('file:///C:/', '');
   }
 }
