@@ -6,16 +6,20 @@ import { Manga } from '../../../domain/manga/manga';
 import { MangaseeSource } from '../../../domain/manga/mangasee/mangasee-source';
 
 const Overview = () => {
+  const source = new MangaseeSource();
+
   const [search] = useState('');
   const [page, setPage] = useState(1);
   const [manga, setManga] = useState<Manga[]>([]);
   const [loadMore, setLoadMore] = useState(false);
-
+  
   useEffect(() => {
     (async () => {
       setLoadMore(false);
-      setManga([...manga, ...await new MangaseeSource().search(search, page)]);
+      setManga([...manga, ...await source.search(search, page)]);
       setPage(page + 1)
+
+      return source.abortRequest();
     })();
 
     window.addEventListener('scroll', handleScroll);

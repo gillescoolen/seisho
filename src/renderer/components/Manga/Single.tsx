@@ -14,6 +14,8 @@ const Single = (props: any) => {
       window.scrollTo(0, 0);
       await manga.fetchDetails();
       setLoading(false);
+
+      return manga.abortRequest();
     })();
   }, [loading]);
 
