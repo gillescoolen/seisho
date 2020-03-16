@@ -9,9 +9,11 @@ const Reader = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      await chapter.fetch();
+      if (!chapter.hasFetched()) await chapter.fetch();
       load(false);
     })();
+
+    if (!chapter.hasPrefetched()) chapter.prefetchPages();
 
     window.addEventListener('keydown', paginate);
 

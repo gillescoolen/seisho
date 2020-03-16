@@ -11,9 +11,13 @@ export abstract class Chapter extends HttpResource {
   protected currentPage: number = 0;
 
   protected pages: string[] = [];
+  protected fetchedPages: HTMLImageElement[] = [];
 
   public getCurrentPage() {
-    return this.pages[this.currentPage];
+    const page = this.pages[this.currentPage];
+    const fetchedPage = this.fetchedPages[this.currentPage];
+
+    return (fetchedPage) ? fetchedPage.src : page;
   }
 
   public completed() {
@@ -58,7 +62,22 @@ export abstract class Chapter extends HttpResource {
     this.currentPage--;
   }
 
-  private hasFetched(): boolean {
+  public hasFetched(): boolean {
     return this.firstPage !== 0 && this.lastPage !== 0;
+  }
+
+  public hasPrefetched(): boolean {
+    return this.fetchedPages.length > 1;
+  }
+
+  public prefetchPages() {
+    if (this.fetchedPages.length >= this.pages.length) return;
+
+    this.pages.forEach(page => {
+      const fetchedPage = new Image();
+      fetchedPage.src = page;
+
+      this.fetchedPages.push(fetchedPage)
+    });
   }
 }

@@ -155,7 +155,6 @@ export abstract class Manga extends HttpResource {
     const rawManga = localStorage.getItem(this.title);
     if (rawManga) {
       const manga = JSON.parse(rawManga) as PersistedManga;
-      console.log(manga);
       if (manga.trackingInfo && manga.trackingInfo.personalTrackerMediaId && manga.trackingInfo.mediaId) {
         this.trackingInfo.personalTrackerMediaId = manga.trackingInfo.personalTrackerMediaId;
         this.trackingInfo.mediaId = manga.trackingInfo.mediaId;
