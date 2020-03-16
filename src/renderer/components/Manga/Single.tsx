@@ -1,5 +1,5 @@
 import { ChapterList } from '.';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
@@ -7,16 +7,15 @@ import { Manga } from '../../../domain/manga/manga';
 
 const Single = (props: any) => {
   const [manga] = useState<Manga>(props.location.state);
-  const [loading, setLoading] = useState(true);
+  const [loading, load] = useState(true);
 
   useEffect(() => {
     (async () => {
       window.scrollTo(0, 0);
       await manga.fetchDetails();
-      setLoading(false);
-
-      return manga.abortRequest();
+      load(false);
     })();
+    return manga.abortRequest();
   }, [loading]);
 
   return (
@@ -48,7 +47,7 @@ const Single = (props: any) => {
         </ChaptersArea>
       }
     </Container>
-  )
+  );
 };
 
 const Container = styled.div`
@@ -57,7 +56,7 @@ const Container = styled.div`
   grid-gap: 8rem;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-template-areas: "info chapters" "widgets chapters" "widgets chapters";
+  grid-template-areas: 'info chapters' 'widgets chapters' 'widgets chapters';
 `;
 
 const InfoArea = styled(motion.div)`
