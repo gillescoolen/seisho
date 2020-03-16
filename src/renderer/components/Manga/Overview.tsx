@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader/root';
 import React, { useEffect, useState } from 'react';
 import { Manga } from '../../../domain/manga/manga';
 import { MangaseeSource } from '../../../domain/manga/mangasee/mangasee-source';
+import { motion } from 'framer-motion';
 
 const Overview = () => {
   const source = new MangaseeSource();
@@ -11,11 +12,9 @@ const Overview = () => {
   const [search] = useState('');
   const [page, setPage] = useState(1);
   const [manga, setManga] = useState<Manga[]>([]);
-  const [isCurrent, setAsCurrent] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
-    if (!isCurrent) return;
 
     (async () => {
       setLoadMore(false);
@@ -26,7 +25,6 @@ const Overview = () => {
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      setAsCurrent(false);
       source.abortRequest();
       window.removeEventListener('scroll', handleScroll);
     };
@@ -45,13 +43,20 @@ const Overview = () => {
   return (
     <Container>
       {manga.map((info, index) => (
-        <Cover manga={info} key={index} />
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Cover manga={info} />
+        </motion.div>
       ))}
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   display: grid;
   grid-gap: 20px;
   place-content: center;

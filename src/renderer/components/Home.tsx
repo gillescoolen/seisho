@@ -3,9 +3,8 @@ import Reader from './Reader/Reader';
 import Toolbar from './Toolbar/Toolbar';
 import { Overview, Single } from './Manga';
 import { hot } from 'react-hot-loader/root';
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
 import { AniList } from '../../domain/anilist/anilist';
 import { MangaseeSource } from '../../domain/manga/mangasee/mangasee-source';
 import { MediaListStatus } from '../../domain/anilist/types';
@@ -84,13 +83,13 @@ const Home = () => (
     <Container>
       <Toolbar />
       <GlobalStyles />
-      <CacheSwitch>
+      <Switch>
         <Route path="/manga/reader/:title" component={Reader} />
         <Route path="/manga/:title" component={Single} />
-        <CacheRoute path="/overview">
+        <Route path="/overview">
           <Overview />
-        </CacheRoute>
-        <CacheRoute path="/">
+        </Route>
+        <Route path="/">
           <h1>Welcome struggler</h1>
           <button onClick={anilistLogin}>Login</button>
           <button onClick={search}>Search</button>
@@ -99,8 +98,8 @@ const Home = () => (
           <button onClick={updateEntry}>updateEntry</button>
           <button onClick={syncEntry}>syncEntry</button>
           <button onClick={persistProgressWithoutTracker}>persistProgressWithoutTracker</button>
-        </CacheRoute>
-      </CacheSwitch>
+        </Route>
+      </Switch>
     </Container>
   </HashRouter>
 );

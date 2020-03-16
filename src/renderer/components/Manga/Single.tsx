@@ -27,7 +27,7 @@ const Single = (props: any) => {
       >
         <img src={manga.getThumbnailUrl()} />
         <h1>{manga.getTitle()}</h1>
-        {!loading && (
+        {!loading &&
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -35,9 +35,9 @@ const Single = (props: any) => {
           >
             {manga.getDescription()}
           </motion.p>
-        )}
+        }
       </InfoArea>
-      {!loading && (
+      {!loading &&
         <ChaptersArea
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
@@ -45,7 +45,7 @@ const Single = (props: any) => {
         >
           <ChapterList manga={manga} />
         </ChaptersArea>
-      )}
+      }
     </Container>
   );
 };

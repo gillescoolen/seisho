@@ -89,22 +89,6 @@ const Page = styled.div`
   background-repeat: no-repeat;
 `;
 
-const Controls = styled.div`
-  display: flex;
-  position: absolute;
-  flex-direction: row;
-  justify-content: space-between;
-
-  button {
-    color: white;
-    border: none;
-    padding: 1rem;
-    font-weight: 700;
-    border-radius: 5px;
-    background-color: #1c2029;
-  }
-`;
-
 const Container = styled.div`
   width: 100%;
   height: 100%;
