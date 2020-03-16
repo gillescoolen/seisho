@@ -11,9 +11,12 @@ const Overview = () => {
   const [search] = useState('');
   const [page, setPage] = useState(1);
   const [manga, setManga] = useState<Manga[]>([]);
+  const [isCurrent, setAsCurrent] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
+    if (!isCurrent) return;
+
     (async () => {
       setLoadMore(false);
       setManga([...manga, ...(await source.search(search, page))]);
@@ -21,8 +24,9 @@ const Overview = () => {
     })();
 
     window.addEventListener('scroll', handleScroll);
-    
+
     return () => {
+      setAsCurrent(false);
       source.abortRequest();
       window.removeEventListener('scroll', handleScroll);
     };
