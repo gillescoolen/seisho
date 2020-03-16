@@ -20,8 +20,12 @@ export abstract class Chapter extends HttpResource {
     return (fetchedPage) ? fetchedPage.src : page;
   }
 
+  public getCurrentPageNumber() {
+    return this.currentPage;
+  }
+
   public completed() {
-    return this.currentPage > this.pages.length;
+    return this.pages.length !== 0 && this.currentPage === this.pages.length;
   }
 
   public setTitle(title: string) {
@@ -68,6 +72,10 @@ export abstract class Chapter extends HttpResource {
 
   public hasPrefetched(): boolean {
     return this.fetchedPages.length > 1;
+  }
+
+  public hasFinished(): boolean {
+    return this.currentPage === this.pages.length && this.pages.length !== 0;
   }
 
   public prefetchPages() {

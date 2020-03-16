@@ -82,13 +82,13 @@ const persistProgressWithoutTracker = async () => {
 const Home = () => (
   <HashRouter>
     <Container>
-      <Toolbar/>
-      <GlobalStyles/>
+      <Toolbar />
+      <GlobalStyles />
       <CacheSwitch>
         <Route path="/manga/reader/:title" component={Reader} />
         <Route path="/manga/:title" component={Single} />
         <CacheRoute path="/overview">
-          <Overview/>
+          <Overview />
         </CacheRoute>
         <CacheRoute path="/">
           <h1>Welcome struggler</h1>

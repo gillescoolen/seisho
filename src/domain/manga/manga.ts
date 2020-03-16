@@ -186,21 +186,29 @@ export abstract class Manga extends HttpResource {
     return this.chapters[this.currentChapter];
   }
 
-  public nextChapter() {
-    if (this.chapters.length === 0) {
-      throw new Error('Cannot paginate on that has no chapters');
-    }
+  public setCurrentChapter(chapter: Chapter) {
+    this.currentChapter = this.chapters.findIndex(c => c.getTitle() === chapter.getTitle());
+  }
 
-    this.currentChapter++;
+  public hasNextChapter() {
+    return (this.currentChapter === 0) ? false : true;
+  }
+
+  public nextChapter() {
+    if (this.chapters.length === 0) throw new Error('Cannot paginate on that has no chapters');
+
+    if (this.currentChapter === 0) return;
+
+    this.currentChapter--;
     this.persist();
   }
 
   public previousChapter() {
-    if (this.chapters.length === 0) {
-      throw new Error('Cannot paginate on that has no chapters');
-    }
+    if (this.chapters.length === 0) throw new Error('Cannot paginate on that has no chapters');
 
-    this.currentChapter--;
+    if (this.currentChapter === this.chapters.length) return;
+
+    this.currentChapter++;
     this.persist();
   }
 
