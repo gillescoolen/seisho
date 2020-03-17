@@ -3,11 +3,15 @@ import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
 import { Manga } from '../../../domain/manga/manga';
 import { Chapter } from '../../../domain/manga/chapter';
+import { StyledLink } from '../Manga/Cover';
+
 
 const Reader = (props: any) => {
   const [manga] = useState<Manga>(props.location.state.manga);
   const [chapter, setChapter] = useState<Chapter>(props.location.state.chapter);
   const [loading, load] = useState(true);
+
+  const buttonRef = React.createRef<typeof StyledLink>();
 
   useEffect(() => {
     (async () => {
@@ -37,8 +41,14 @@ const Reader = (props: any) => {
   });
 
   const paginate = async (e: KeyboardEvent) => {
+    e.key === 'Backspace' && goBack();
+    e.key === 'Escape' && goBack();
     e.key === 'ArrowRight' && next();
     e.key === 'ArrowLeft' && await previous();
+  };
+
+  const goBack = () => {
+    (buttonRef.current as any as HTMLLinkElement).click();
   };
 
   const next = () => {
@@ -74,6 +84,9 @@ const Reader = (props: any) => {
 
   return (
     <Container>
+      <StyledLink ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }}>
+        Go back
+      </StyledLink>
       {chapter.completed()
         ?
         <Page>
