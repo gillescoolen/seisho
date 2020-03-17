@@ -80,6 +80,10 @@ const Container = styled.div`
 const InfoArea = styled(motion.div)`
   grid-area: info;
 
+  position: fixed;
+  padding: 1rem;
+  max-width: 50%;
+
   img {
     border-radius: 5px;
   }
