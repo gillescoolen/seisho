@@ -54,6 +54,10 @@ export abstract class Manga extends HttpResource {
     this.persist();
   }
 
+  public tracking() {
+    return this.trackingInfo.mediaId !== 0;
+  }
+
   public getTrackerMediaId() {
     if (!this.tracker) {
       this.throwNotrackerError();

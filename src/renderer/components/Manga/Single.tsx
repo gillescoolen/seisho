@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
 import { Manga } from '../../../domain/manga/manga';
+import MangaTracker from '../Tracker/MangaTracker';
 
 const Single = (props: any) => {
   const [manga] = useState<Manga>(props.location.state);
@@ -26,6 +27,7 @@ const Single = (props: any) => {
         transition={{ duration: 0.3 }}
       >
         <img src={manga.getThumbnailUrl()} />
+        <MangaTracker manga={manga} />
         <h1>{manga.getTitle()}</h1>
         {!loading &&
           <motion.p
@@ -55,12 +57,16 @@ const Container = styled.div`
   display: grid;
   grid-gap: 8rem;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 8fr;
   grid-template-areas: 'info chapters' 'widgets chapters' 'widgets chapters';
 `;
 
 const InfoArea = styled(motion.div)`
   grid-area: info;
+
+  img {
+    border-radius: 5px;
+  }
 `;
 
 const ChaptersArea = styled(motion.div)`
