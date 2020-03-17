@@ -78,16 +78,23 @@ const persistProgressWithoutTracker = async () => {
   manga.nextChapter();
 };
 
+const searchWithGenres = async () => {
+  const allGenres = await mangaSee.fetchGenres();
+  const genres = [allGenres[1]];
+  const genresNo = [allGenres[2], allGenres[3]];
+  console.log(await mangaSee.search('', 1, genres, genresNo));
+};
+
 const Home = () => (
   <HashRouter>
     <Container>
-      <Toolbar />
-      <GlobalStyles />
+      <Toolbar/>
+      <GlobalStyles/>
       <Switch>
-        <Route path="/manga/reader/:title" component={Reader} />
-        <Route path="/manga/:title" component={Single} />
+        <Route path="/manga/reader/:title" component={Reader}/>
+        <Route path="/manga/:title" component={Single}/>
         <Route path="/overview">
-          <Overview />
+          <Overview/>
         </Route>
         <Route path="/">
           <h1>Welcome struggler</h1>
@@ -98,6 +105,7 @@ const Home = () => (
           <button onClick={updateEntry}>updateEntry</button>
           <button onClick={syncEntry}>syncEntry</button>
           <button onClick={persistProgressWithoutTracker}>persistProgressWithoutTracker</button>
+          <button onClick={searchWithGenres}>search with genres</button>
         </Route>
       </Switch>
     </Container>

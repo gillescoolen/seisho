@@ -1,14 +1,14 @@
-import { MangaSource } from "../manga-source";
-import { Status } from "../status";
-import { MangaseeManga } from "./mangasee-manga";
+import { MangaSource } from '../manga-source';
+import { Status } from '../status';
+import { MangaseeManga } from './mangasee-manga';
 
 export class MangaseeSource extends MangaSource {
   constructor() {
-    super("https://mangaseeonline.us");
+    super('https://mangaseeonline.us');
   }
 
   getName(): string {
-    return "Mangasee";
+    return 'Mangasee';
   }
 
   // TODO: implement other stuff too.
@@ -25,12 +25,20 @@ export class MangaseeSource extends MangaSource {
    genre:
    genreNo:
     */
-  async search(name: string, pageNumber: number): Promise<MangaseeManga[]> {
+  async search(name: string, pageNumber: number, genres: string[] = [], genresExclude: string[] = []): Promise<MangaseeManga[]> {
     const formData = new FormData();
     formData.set('keyword', name);
     formData.set('page', pageNumber.toString());
     formData.set('sortBy', 'popularity');
     formData.set('sortOrder', 'descending');
+
+    if (genres.length > 0) {
+      formData.set('genre', genres.join(','));
+    }
+
+    if (genresExclude.length > 0) {
+      formData.set('genreNo', genresExclude.join(','));
+    }
 
     const html = await this.postForm<string>(`${this.baseUri}/search/request.php`, formData);
     const document = await this.parseHTML(html);
@@ -43,8 +51,8 @@ export class MangaseeSource extends MangaSource {
       }
 
       const imageElement = requestedElement.querySelector<HTMLImageElement>('img');
-      const titleElement = detailElement.querySelector<HTMLLinkElement>("a");
-      const authorElement = detailElement.querySelector<HTMLLinkElement>("p:nth-child(2) > a");
+      const titleElement = detailElement.querySelector<HTMLLinkElement>('a');
+      const authorElement = detailElement.querySelector<HTMLLinkElement>('p:nth-child(2) > a');
       const genresElement = detailElement.querySelector<HTMLParagraphElement>('p:nth-child(5)');
       const statusElement = requestedElement.querySelector<HTMLLinkElement>('p:nth-child(3) > a:nth-child(1)');
 
@@ -60,7 +68,7 @@ export class MangaseeSource extends MangaSource {
         const genre = genreElement.textContent;
 
         if (genre) {
-          manga.addGenre(genre)
+          manga.addGenre(genre);
         }
       });
 
@@ -78,6 +86,15 @@ export class MangaseeSource extends MangaSource {
     }
 
     return Status.UNKNOWN;
+  }
+
+  async fetchGenres(): Promise<string[]> {
+    const document = await this.getHTMLFrom(`${this.baseUri}/search`);
+    const genreElementList = document.querySelector('#genreCollapse > div');
+
+    return [...genreElementList!.querySelectorAll('#genreCollapse > div > a')].map(element => {
+      return element.innerHTML;
+    });
   }
 }
 
