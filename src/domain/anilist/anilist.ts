@@ -145,8 +145,6 @@ export class AniList {
         }
       }`;
 
-    console.table(entryData)
-
     const variables: Partial<SaveMediaListEntry> = {
       mediaId: manga.getTrackerMediaId(),
       ...entryData
@@ -168,8 +166,6 @@ export class AniList {
     }
 
     const saveMediaListEntry = (await response.json()).data.SaveMediaListEntry as Partial<SaveMediaListEntry>;
-
-    console.table(saveMediaListEntry);
 
     manga.recoverFromTracker({
       trackingInfo: {
@@ -213,9 +209,12 @@ export class AniList {
       throw new Error('Something went wrong');
     }
     const saveMediaListEntry = (await response.json()).data.Page.mediaList[0] as Partial<SaveMediaListEntry>;
+    const progress = (saveMediaListEntry.progress && saveMediaListEntry.progress > manga.getProgress())
+      ? saveMediaListEntry.progress
+      : manga.getProgress()
 
     manga.recoverFromTracker({
-      progress: saveMediaListEntry!.progress!,
+      progress,
       trackingInfo: {
         mediaId: variables!.mediaId!,
         personalTrackerMediaId: saveMediaListEntry!.id!,
