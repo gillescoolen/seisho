@@ -83,21 +83,28 @@ const Reader = (props: any) => {
     load(true);
   };
 
+  const viewProgress = () => {
+    return `${chapter.getCurrentPageNumber() + 1} / ${chapter.getLastPageNumber()}`;
+  };
+
   return (
     <Container>
-      <StyledLink ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }}>
-        Go back
-      </StyledLink>
+      <StyledLink ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }}/>
+      <div>
+        {chapter.getTitle()}
+      </div>
       {chapter.completed()
         ?
         <Page>
           <p>{chapter.getTitle()} Finished.</p>
           {!manga.hasNextChapter() &&
-            <p>No next chapter found.</p>
+          <p>No next chapter found.</p>
           }
         </Page>
-        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }} />
+        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }}/>
       }
+
+      {!chapter.completed() && <div>{viewProgress()}</div>}
     </Container>
   );
 };
