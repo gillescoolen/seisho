@@ -92,7 +92,11 @@ export class MangaseeSource extends MangaSource {
     const document = await this.getHTMLFrom(`${this.baseUri}/search`);
     const genreElementList = document.querySelector('#genreCollapse > div');
 
-    return [...genreElementList!.querySelectorAll('#genreCollapse > div > a')].map(element => {
+    if (!genreElementList) {
+      throw new Error('Could not fetch geners.');
+    }
+
+    return [...genreElementList.querySelectorAll('#genreCollapse > div > a')].map(element => {
       return element.innerHTML;
     });
   }
