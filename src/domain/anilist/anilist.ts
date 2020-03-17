@@ -1,23 +1,36 @@
 import electron from 'electron';
-import { AniListSearchParams, AniListSearchResponse, SaveMediaListEntry } from './types';
+import { AniListSearchParams, AniListSearchResponse, AniListUser, SaveMediaListEntry } from './types';
 import { Manga } from '../manga/manga';
 
 export class AniList {
   private accessToken = '';
 
   private static readonly ANILIST_PERSIST_KEY = 'anilist-accesstoken';
+  private static readonly ANILIST_USER_PERSIST_KEY = 'anilist-user';
+
   private readonly baseUrl = 'https://graphql.anilist.co';
+
+  private readonly currentUser: AniListUser | null = null;
+
+  public getCurrentUser() {
+    return this.currentUser;
+  }
 
   constructor() {
     const accessToken = localStorage.getItem(AniList.ANILIST_PERSIST_KEY);
+    const user = localStorage.getItem(AniList.ANILIST_USER_PERSIST_KEY);
 
     if (accessToken) {
       this.accessToken = accessToken;
     }
+
+    if (user) {
+      this.currentUser = JSON.parse(user) as AniListUser;
+    }
   }
 
   public login(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       let authWindow: electron.BrowserWindow | null = new electron.remote.BrowserWindow({
         width: 800,
         height: 600,
@@ -26,7 +39,7 @@ export class AniList {
         show: false
       });
 
-      authWindow.webContents.on('dom-ready', () => {
+      authWindow.webContents.on('dom-ready', async () => {
         if (!authWindow) {
           return;
         }
@@ -37,6 +50,7 @@ export class AniList {
           authWindow.close();
           try {
             this.processAccessToken(url);
+            await this.getUserData();
             resolve();
           } catch (e) {
             reject(e);
@@ -52,6 +66,35 @@ export class AniList {
         authWindow = null;
       });
     });
+  }
+
+  private async getUserData() {
+    const query = `
+        {
+          Data: Viewer {
+            id
+            name
+            avatar {
+              large
+            }
+          }
+        }`.trim();
+
+    const response = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    });
+
+    if (!response.ok) {
+      throw new Error('Something went wrong');
+    }
+    const user = (await response.json()).data.Data as AniListUser;
+    localStorage.setItem(AniList.ANILIST_USER_PERSIST_KEY, JSON.stringify(user));
   }
 
   public async search(name: string, pageNumber: number): Promise<AniListSearchResponse> {
@@ -211,7 +254,7 @@ export class AniList {
     const saveMediaListEntry = (await response.json()).data.Page.mediaList[0] as Partial<SaveMediaListEntry>;
     const progress = (saveMediaListEntry.progress && saveMediaListEntry.progress > manga.getProgress())
       ? saveMediaListEntry.progress
-      : manga.getProgress()
+      : manga.getProgress();
 
     manga.recoverFromTracker({
       progress,
