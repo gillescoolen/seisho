@@ -14,7 +14,7 @@ const Cover = (props: { manga: Manga }) => {
   )
 };
 
-const StyledLink = styled(Link)`
+export const StyledLink = styled(Link)`
   color: white;
   text-decoration: none;
 `;
