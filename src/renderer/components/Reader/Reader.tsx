@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
 import { Manga } from '../../../domain/manga/manga';
 import { Chapter } from '../../../domain/manga/chapter';
-import { StyledLink } from '../Manga/Cover';
+import { Link } from 'react-router-dom';
 
 
 const Reader = (props: any) => {
@@ -11,7 +11,7 @@ const Reader = (props: any) => {
   const [chapter, setChapter] = useState<Chapter>(props.location.state.chapter);
   const [loading, load] = useState(true);
 
-  const buttonRef = React.createRef<typeof StyledLink>();
+  const buttonRef = React.createRef<typeof Link>();
 
   useEffect(() => {
     (async () => {
@@ -89,7 +89,7 @@ const Reader = (props: any) => {
 
   return (
     <Container>
-      <StyledLink ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }}/>
+      <Link ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }}/>
       <div>
         {chapter.getTitle()}
       </div>
