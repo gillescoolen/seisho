@@ -6,19 +6,20 @@ import { Link } from 'react-router-dom';
 import MangaTracker from '../Tracker/MangaTracker';
 
 const ChapterList = (props: { manga: Manga }) => {
+  const read = props.manga.getChapters().length - props.manga.getProgress();
   const setUnreadClass = (index: number) => {
     if (props.manga.isUnread()) {
       return 'unread';
     }
 
-    return props.manga.getProgress() > index ? 'unread' : '';
+    return read > index ? 'unread' : '';
   };
   return (
     <List>
       <Filters>
-        <MangaTracker manga={props.manga} />
+        <MangaTracker manga={props.manga}/>
       </Filters>
-      {props.manga.getChapters().map((chapter, index) => (
+      {props.manga.getChapters().reverse().map((chapter, index) => (
         <Chapter
           to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
           key={index}
