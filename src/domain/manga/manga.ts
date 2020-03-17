@@ -245,7 +245,11 @@ export abstract class Manga extends HttpResource {
   }
 
   recoverFromTracker(persistedManga: Partial<PersistedManga>) {
-    this.currentChapter = persistedManga.progress ?? this.currentChapter;
+    const progress = persistedManga.progress;
+
+    if (progress) {
+      this.currentChapter = this.chapters.length - progress;
+    }
     this.trackingInfo = persistedManga!.trackingInfo!;
 
     this.persist();
