@@ -55,12 +55,16 @@ const Container = styled.div`
   display: grid;
   grid-gap: 8rem;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 8fr;
   grid-template-areas: 'info chapters' 'widgets chapters' 'widgets chapters';
 `;
 
 const InfoArea = styled(motion.div)`
   grid-area: info;
+
+  img {
+    border-radius: 5px;
+  }
 `;
 
 const ChaptersArea = styled(motion.div)`

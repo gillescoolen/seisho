@@ -56,38 +56,38 @@ export class AniList {
 
   public async search(name: string, pageNumber: number): Promise<AniListSearchResponse> {
     const query = `
-query ($id: Int, $page: Int, $perPage: Int, $search: String) {
-  Page (page: $page, perPage: $perPage) {
-    pageInfo {
-      total
-      currentPage
-      lastPage
-      hasNextPage
-      perPage
-    }
-    media (id: $id, search: $search, type: MANGA, format_not_in: [NOVEL]) {
-      id
-      title {
-        romaji
-        english
-        native
+      query ($id: Int, $page: Int, $perPage: Int, $search: String) {
+        Page (page: $page, perPage: $perPage) {
+          pageInfo {
+            total
+            currentPage
+            lastPage
+            hasNextPage
+            perPage
+          }
+          media (id: $id, search: $search, type: MANGA, format_not_in: [NOVEL]) {
+            id
+            title {
+              romaji
+              english
+              native
+            }
+            coverImage {
+              large
+            }
+            type
+            status
+            chapters
+            description
+            startDate {
+              year
+              month
+              day
+            }
+          }
+        }
       }
-      coverImage {
-        large
-      }
-      type
-      status
-      chapters
-      description
-      startDate {
-        year
-        month
-        day
-      }
-    }
-  }
-}
-`.trim();
+    `.trim();
 
     const variables: AniListSearchParams = {
       search: name,
@@ -137,13 +137,13 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
 
   public async updateEntry(manga: Manga, entryData: Partial<SaveMediaListEntry>) {
     const query = `
-    mutation ($mediaId: Int, $status: MediaListStatus, $scoreRaw: Int, $progress: Int) {
-    SaveMediaListEntry (mediaId: $mediaId, status: $status, scoreRaw: $scoreRaw, progress: $progress) {
-        id
-        status
-        score(format: POINT_100)
-    }
-}`;
+      mutation ($mediaId: Int, $status: MediaListStatus, $scoreRaw: Int, $progress: Int) {
+        SaveMediaListEntry (mediaId: $mediaId, status: $status, scoreRaw: $scoreRaw, progress: $progress) {
+          id
+          status
+          score(format: POINT_100)
+        }
+      }`;
 
     const variables: Partial<SaveMediaListEntry> = {
       mediaId: manga.getTrackerMediaId(),
@@ -179,16 +179,16 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
 
   public async retrieveEntry(manga: Manga) {
     const query = `
-    query ($mediaId: Int, $id: Int) {
-      Page {
-           mediaList (mediaId: $mediaId, id: $id) {
+      query ($mediaId: Int, $id: Int) {
+        Page {
+          mediaList (mediaId: $mediaId, id: $id) {
             id
             status
             score(format: POINT_100)
             progress
+          }
         }
-      }
-}`;
+      }`;
 
     const variables = {
       id: manga.getPersonalMediaId(),
@@ -209,9 +209,12 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
       throw new Error('Something went wrong');
     }
     const saveMediaListEntry = (await response.json()).data.Page.mediaList[0] as Partial<SaveMediaListEntry>;
+    const progress = (saveMediaListEntry.progress && saveMediaListEntry.progress > manga.getProgress())
+      ? saveMediaListEntry.progress
+      : manga.getProgress()
 
     manga.recoverFromTracker({
-      progress: saveMediaListEntry!.progress!,
+      progress,
       trackingInfo: {
         mediaId: variables!.mediaId!,
         personalTrackerMediaId: saveMediaListEntry!.id!,

@@ -54,6 +54,10 @@ export abstract class Manga extends HttpResource {
     this.persist();
   }
 
+  public tracking() {
+    return this.trackingInfo.mediaId !== 0;
+  }
+
   public getTrackerMediaId() {
     if (!this.tracker) {
       this.throwNotrackerError();
@@ -168,25 +172,17 @@ export abstract class Manga extends HttpResource {
         this.trackingInfo.status = manga.trackingInfo.status;
       }
 
-      this.currentChapter = this.chapters.length - manga.progress;
+      this.currentChapter = manga.progress;
       this.unread = false;
     }
   }
 
-  // TODO: refactor this function
   private persist() {
-    if (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0) {
-      const data: Partial<PersistedManga> = {
-        progress: this.chapters.length - this.getProgress()
-      };
-      localStorage.setItem(this.title, JSON.stringify(data));
-    } else {
-      const data: PersistedManga = {
-        progress: this.chapters.length - this.getProgress(),
-        trackingInfo: this.trackingInfo
-      };
-      localStorage.setItem(this.title, JSON.stringify(data));
-    }
+    const data = (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0)
+      ? { progress: this.getProgress() }
+      : { progress: this.getProgress(), trackingInfo: this.trackingInfo }
+
+    localStorage.setItem(this.title, JSON.stringify(data));
   }
 
   public getCurrentChapter() {
@@ -203,23 +199,14 @@ export abstract class Manga extends HttpResource {
   }
 
   public hasNextChapter() {
-    return this.currentChapter !== 0;
+    return this.currentChapter < this.chapters.length + 1;
   }
 
   public hasPreviousChapter() {
-    return this.currentChapter < this.chapters.length - 1;
+    return this.currentChapter !== 0;
   }
 
   public nextChapter() {
-    if (this.chapters.length === 0) throw new Error('Cannot paginate on that has no chapters');
-
-    if (this.currentChapter === 0) return;
-
-    this.currentChapter--;
-    this.persist();
-  }
-
-  public previousChapter() {
     if (this.chapters.length === 0) throw new Error('Cannot paginate on that has no chapters');
 
     if (this.currentChapter === this.chapters.length) return;
@@ -228,9 +215,18 @@ export abstract class Manga extends HttpResource {
     this.persist();
   }
 
+  public previousChapter() {
+    if (this.chapters.length === 0) throw new Error('Cannot paginate on that has no chapters');
+
+    if (this.currentChapter === 0) return;
+
+    this.currentChapter--;
+    this.persist();
+  }
+
   public async syncToTracker() {
     await this.tracker?.updateEntry(this, {
-      progress: this.chapters.length - this.getProgress(),
+      progress: this.getProgress(),
       scoreRaw: this.getScore(),
       status: this.getTrackingStatus()
     });
@@ -248,7 +244,7 @@ export abstract class Manga extends HttpResource {
     const progress = persistedManga.progress;
 
     if (progress) {
-      this.currentChapter = this.chapters.length - progress;
+      this.currentChapter = progress;
     }
     this.trackingInfo = persistedManga!.trackingInfo!;
 

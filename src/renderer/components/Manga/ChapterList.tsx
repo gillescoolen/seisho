@@ -3,19 +3,23 @@ import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import { Manga } from '../../../domain/manga/manga';
 import { Link } from 'react-router-dom';
+import MangaTracker from '../Tracker/MangaTracker';
 
 const ChapterList = (props: { manga: Manga }) => {
+  const read = props.manga.getChapters().length - props.manga.getProgress();
   const setUnreadClass = (index: number) => {
     if (props.manga.isUnread()) {
       return 'unread';
     }
 
-    return props.manga.getProgress() > index ? 'unread' : '';
+    return read > index ? 'unread' : '';
   };
   return (
     <List>
-      <Filters>Filters</Filters>
-      {props.manga.getChapters().map((chapter, index) => (
+      <Filters>
+        <MangaTracker manga={props.manga}/>
+      </Filters>
+      {props.manga.getChapters().reverse().map((chapter, index) => (
         <Chapter
           to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
           key={index}
@@ -31,7 +35,6 @@ const ChapterList = (props: { manga: Manga }) => {
 const Filters = styled.div`
   padding: 1rem 1rem;
   font-weight: 700;
-  text-align: center;
   border-bottom: 5px solid #1d2c42;
 `;
 
