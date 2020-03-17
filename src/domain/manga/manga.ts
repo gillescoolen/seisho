@@ -15,6 +15,12 @@ export abstract class Manga extends HttpResource {
   protected detailsLink: string = '';
   protected chapters: Chapter[] = [];
 
+  private unread = true;
+
+  public isUnread() {
+    return this.unread;
+  }
+
   protected trackingInfo: TrackingInfo = {
     mediaId: 0,
     personalTrackerMediaId: 0,
@@ -163,6 +169,7 @@ export abstract class Manga extends HttpResource {
       }
 
       this.currentChapter = this.chapters.length - manga.progress;
+      this.unread = false;
     }
   }
 
@@ -197,6 +204,10 @@ export abstract class Manga extends HttpResource {
 
   public hasNextChapter() {
     return this.currentChapter !== 0;
+  }
+
+  public hasPreviousChapter() {
+    return this.currentChapter < this.chapters.length - 1;
   }
 
   public nextChapter() {

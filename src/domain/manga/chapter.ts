@@ -85,7 +85,7 @@ export abstract class Chapter extends HttpResource {
       const fetchedPage = new Image();
       fetchedPage.src = page;
 
-      this.fetchedPages.push(fetchedPage)
+      this.fetchedPages.push(fetchedPage);
     });
   }
 }

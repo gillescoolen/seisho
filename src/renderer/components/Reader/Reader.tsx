@@ -55,8 +55,10 @@ const Reader = (props: any) => {
     if (loading) return;
 
     if (chapter.getCurrentPageNumber() < 1) {
-      manga.previousChapter();
-      setChapter(manga.getCurrentChapter());
+      if (manga.hasPreviousChapter()) {
+        manga.previousChapter();
+        setChapter(manga.getCurrentChapter());
+      }
     } else {
       chapter.previousPage();
     }
