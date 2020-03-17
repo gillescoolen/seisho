@@ -66,6 +66,10 @@ export abstract class Chapter extends HttpResource {
     this.currentPage--;
   }
 
+  public getLastPageNumber() {
+    return this.lastPage;
+  }
+
   public startFromLastPage() {
     this.currentPage = this.lastPage;
   }
