@@ -145,6 +145,8 @@ export class AniList {
         }
       }`;
 
+    console.table(entryData)
+
     const variables: Partial<SaveMediaListEntry> = {
       mediaId: manga.getTrackerMediaId(),
       ...entryData
@@ -166,6 +168,8 @@ export class AniList {
     }
 
     const saveMediaListEntry = (await response.json()).data.SaveMediaListEntry as Partial<SaveMediaListEntry>;
+
+    console.table(saveMediaListEntry);
 
     manga.recoverFromTracker({
       trackingInfo: {

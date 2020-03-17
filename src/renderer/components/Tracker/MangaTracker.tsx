@@ -14,8 +14,8 @@ const MangaTracker = (props: { manga: Manga }) => {
     (async () => {
       manga.setTracker(anilist);
       await manga.syncFromTracker();
-      setTracked(manga.tracking());
     })();
+    setTracked(manga.tracking());
   }, [tracked]);
 
   const add = async () => {
@@ -37,8 +37,8 @@ const MangaTracker = (props: { manga: Manga }) => {
   return (
     <Container>
       {tracked
-        ? <Button onClick={sync}>Sync</Button>
-        : <Button onClick={add}>Add</Button>
+        ? <Button onClick={sync}>Sync to AniList</Button>
+        : <Button onClick={add}>Add to AniList</Button>
       }
     </Container>
   )

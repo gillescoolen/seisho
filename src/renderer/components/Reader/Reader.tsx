@@ -20,6 +20,7 @@ const Reader = (props: any) => {
     window.addEventListener('keydown', paginate);
 
     return () => {
+      manga.abortRequest();
       chapter.abortRequest();
       window.removeEventListener('keydown', paginate);
     };
@@ -72,10 +73,10 @@ const Reader = (props: any) => {
         <Page>
           <p>{chapter.getTitle()} Finished.</p>
           {!manga.hasNextChapter() &&
-          <p>No next chapter found.</p>
+            <p>No next chapter found.</p>
           }
         </Page>
-        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }}/>
+        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }} />
       }
     </Container>
   );

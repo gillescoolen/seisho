@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
 import { Manga } from '../../../domain/manga/manga';
-import MangaTracker from '../Tracker/MangaTracker';
 
 const Single = (props: any) => {
   const [manga] = useState<Manga>(props.location.state);
@@ -27,7 +26,6 @@ const Single = (props: any) => {
         transition={{ duration: 0.3 }}
       >
         <img src={manga.getThumbnailUrl()} />
-        <MangaTracker manga={manga} />
         <h1>{manga.getTitle()}</h1>
         {!loading &&
           <motion.p
