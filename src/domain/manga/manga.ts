@@ -177,20 +177,12 @@ export abstract class Manga extends HttpResource {
     }
   }
 
-  // TODO: refactor this function
   private persist() {
-    if (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0) {
-      const data: Partial<PersistedManga> = {
-        progress: this.getProgress()
-      };
-      localStorage.setItem(this.title, JSON.stringify(data));
-    } else {
-      const data: PersistedManga = {
-        progress: this.getProgress(),
-        trackingInfo: this.trackingInfo
-      };
-      localStorage.setItem(this.title, JSON.stringify(data));
-    }
+    const data = (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0)
+      ? { progress: this.getProgress() }
+      : { progress: this.getProgress(), trackingInfo: this.trackingInfo }
+
+    localStorage.setItem(this.title, JSON.stringify(data));
   }
 
   public getCurrentChapter() {
