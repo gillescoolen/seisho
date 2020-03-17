@@ -5,13 +5,21 @@ import { Manga } from '../../../domain/manga/manga';
 import { Link } from 'react-router-dom';
 
 const ChapterList = (props: { manga: Manga }) => {
+  const setUnreadClass = (index: number) => {
+    if (props.manga.isUnread()) {
+      return 'unread';
+    }
+
+    return props.manga.getProgress() > index ? 'unread' : '';
+  };
   return (
     <List>
       <Filters>Filters</Filters>
       {props.manga.getChapters().map((chapter, index) => (
         <Chapter
-          to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state:{ chapter, manga: props.manga} }}
+          to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
           key={index}
+          className={setUnreadClass(index)}
         >
           {chapter.getTitle()}
         </Chapter>
@@ -22,13 +30,13 @@ const ChapterList = (props: { manga: Manga }) => {
 
 const Filters = styled.div`
   padding: 1rem 1rem;
-  margin: -0.5rem -1rem 0 -1rem;
   font-weight: 700;
+  text-align: center;
   border-bottom: 5px solid #1d2c42;
 `;
 
 const List = styled.ul`
-  padding: 1rem;
+  padding: 0;
   list-style: none;
   border-radius: 15px;
   border: 5px solid #1d2c42;
@@ -41,6 +49,10 @@ const Chapter = styled(Link)`
   border-radius: 3px;
   text-decoration: none;
   border-bottom: 1px solid #2a3442;
+
+  &.unread {
+    background-color: #414a5c;
+  }
 
   &:hover {
     cursor: pointer;
