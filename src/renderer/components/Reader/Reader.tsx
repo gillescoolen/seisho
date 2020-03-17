@@ -13,10 +13,9 @@ const Reader = (props: any) => {
     (async () => {
       if (!chapter.hasFetched()) await chapter.fetch();
       if (!chapter.hasPrefetched()) chapter.prefetchPages();
-      manga.setCurrentChapter(chapter);
+      if (manga.getCurrentChapter().getTitle() !== chapter.getTitle()) manga.setCurrentChapter(chapter);
       load(false);
     })();
-
 
     window.addEventListener('keydown', paginate);
 
@@ -36,9 +35,6 @@ const Reader = (props: any) => {
 
     if (chapter.completed()) {
       if (manga.hasNextChapter()) {
-        console.log('Manga has next chapter.');
-        console.log(manga.hasNextChapter());
-
         manga.nextChapter();
         setChapter(manga.getCurrentChapter());
       };
