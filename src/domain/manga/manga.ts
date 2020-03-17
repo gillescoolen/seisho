@@ -162,7 +162,7 @@ export abstract class Manga extends HttpResource {
         this.trackingInfo.status = manga.trackingInfo.status;
       }
 
-      this.currentChapter = manga.progress;
+      this.currentChapter = this.chapters.length - manga.progress;
     }
   }
 
@@ -170,12 +170,12 @@ export abstract class Manga extends HttpResource {
   private persist() {
     if (this.trackingInfo.mediaId === 0 && this.trackingInfo.personalTrackerMediaId === 0) {
       const data: Partial<PersistedManga> = {
-        progress: this.getProgress()
+        progress: this.chapters.length - this.getProgress()
       };
       localStorage.setItem(this.title, JSON.stringify(data));
     } else {
       const data: PersistedManga = {
-        progress: this.getProgress(),
+        progress: this.chapters.length - this.getProgress(),
         trackingInfo: this.trackingInfo
       };
       localStorage.setItem(this.title, JSON.stringify(data));
@@ -190,8 +190,13 @@ export abstract class Manga extends HttpResource {
     this.currentChapter = this.chapters.findIndex(c => c.getTitle() === chapter.getTitle());
   }
 
+  public setFinished() {
+    this.currentChapter = 0;
+    this.persist();
+  }
+
   public hasNextChapter() {
-    return (this.currentChapter === 0) ? false : true;
+    return this.currentChapter !== 0;
   }
 
   public nextChapter() {
@@ -214,7 +219,7 @@ export abstract class Manga extends HttpResource {
 
   public async syncToTracker() {
     await this.tracker?.updateEntry(this, {
-      progress: this.getProgress(),
+      progress: this.chapters.length - this.getProgress(),
       scoreRaw: this.getScore(),
       status: this.getTrackingStatus()
     });

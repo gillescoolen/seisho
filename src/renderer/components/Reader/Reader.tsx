@@ -25,6 +25,13 @@ const Reader = (props: any) => {
     };
   }, [loading]);
 
+  useEffect(() => {
+    // FIXME: check is done whenever the component changes.
+    if (chapter.completed() && !manga.hasNextChapter()) {
+      manga.setFinished();
+    }
+  });
+
   const paginate = (e: KeyboardEvent) => {
     e.key === 'ArrowRight' && next();
     e.key === 'ArrowLeft' && previous();
@@ -37,7 +44,7 @@ const Reader = (props: any) => {
       if (manga.hasNextChapter()) {
         manga.nextChapter();
         setChapter(manga.getCurrentChapter());
-      };
+      }
     } else {
       chapter.nextPage();
     }
@@ -63,10 +70,10 @@ const Reader = (props: any) => {
         <Page>
           <p>{chapter.getTitle()} Finished.</p>
           {!manga.hasNextChapter() &&
-            <p>No next chapter found.</p>
+          <p>No next chapter found.</p>
           }
         </Page>
-        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }} />
+        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }}/>
       }
     </Container>
   );
