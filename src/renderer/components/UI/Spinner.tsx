@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-const Spinner = () => {
+const Spinner = (props: { size: { width: number, height: number } }) => {
   return (
-    <SpinWrapper>
+    <SpinWrapper width={props.size.width} height={props.size.height}>
       <div className="spinner">
         <div className="spinner-dot" />
         <div className="spinner-dot" />
@@ -20,8 +20,8 @@ const Spinner = () => {
 
 const SpinWrapper = styled.div`
   .spinner {
-    width: 40px;
-    height: 40px;
+    width: ${(props: { width: number, height: number }) => props.width}px;
+    height: ${(props: { width: number, height: number }) => props.height}px;
     position: relative;
     animation: spinner 2.5s infinite linear both;
   }

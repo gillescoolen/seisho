@@ -12,7 +12,6 @@ const Single = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      window.scrollTo(0, 0);
       await manga.fetchDetails();
       load(false);
     })();
@@ -37,7 +36,6 @@ const Single = (props: any) => {
 
   return (
     <Container>
-      <Link ref={buttonRef as any} to={{ pathname: `/overview` }} />
       <InfoArea
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
@@ -46,21 +44,20 @@ const Single = (props: any) => {
         <img src={manga.getThumbnailUrl()} />
         <h1>{manga.getTitle()}</h1>
         {!loading &&
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          Genres:
-          <ul>
-            {manga.getGenres().map((genre: string, key: number) => (
-              <li key={key}>{genre}</li>
-            ))}
-          </ul>
-          <p>
-            {manga.getDescription()}
-          </p>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Tags>
+              {manga.getGenres().map((genre: string, key: number) => (
+                <div key={key}>{genre}</div>
+              ))}
+            </Tags>
+            <p>
+              {manga.getDescription()}
+            </p>
+          </motion.div>
         }
       </InfoArea>
       {!loading &&
@@ -69,6 +66,7 @@ const Single = (props: any) => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
+          <Back ref={buttonRef as any} to={{ pathname: `/overview` }} />
           <ChapterList manga={manga} />
         </ChaptersArea>
       }
@@ -85,6 +83,11 @@ const Container = styled.div`
   grid-template-areas: 'info chapters' 'widgets chapters' 'widgets chapters';
 `;
 
+const Back = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
+
 const InfoArea = styled(motion.div)`
   grid-area: info;
 
@@ -95,10 +98,30 @@ const InfoArea = styled(motion.div)`
   img {
     border-radius: 5px;
   }
+
+  h1 {
+    margin: 1.5rem 0 0.5rem 0;
+  }
 `;
 
 const ChaptersArea = styled(motion.div)`
   grid-area: chapters;
+`;
+
+const Tags = styled(motion.div)`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  div {
+    color: white;
+    margin: 0.1rem;
+    font-size: 12px;
+    padding: 0.3rem;
+    user-select: none;
+    border-radius: 5px; 
+    background-color: #232636;
+  }
 `;
 
 export default hot(Single);

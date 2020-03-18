@@ -129,7 +129,8 @@ const Container = styled.div`
 const GlobalStyles = createGlobalStyle`
   body {
     margin: 0;
-    overflow-y:scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     font-family: 'Arial';
   }
 

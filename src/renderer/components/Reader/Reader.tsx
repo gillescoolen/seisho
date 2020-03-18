@@ -23,9 +23,14 @@ const Reader = (props: any) => {
     window.addEventListener('keydown', paginate);
 
     return () => {
+      window.removeEventListener('keydown', paginate);
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    return () => {
       manga.abortRequest();
       chapter.abortRequest();
-      window.removeEventListener('keydown', paginate);
     };
   }, [loading]);
 
