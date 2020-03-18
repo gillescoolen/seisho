@@ -6,51 +6,42 @@ import Filters from './Filters';
 
 const Search = (props: { search: (value: string) => void, close: () => void }) => {
   const [value, setValue] = useState('');
-  const [hasSearched, setHasSearched] = useState(false);
   const [values, setValues] = useState({ active: false, width: 192, height: 36 });
+  const [searched, setSearched] = useState(false);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeydown);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeydown);
-    };
-  }, []);
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [searched]);
 
   const open = () => setValues({ active: true, width: 512, height: 256 });
 
   const handleKeydown = (e: KeyboardEvent) => {
-    // e.key === 'Enter' && console.log('Entered');
-    console.log(`Value: ${value}.`);
-
-    if (e.key === 'ArrowRight') {
-      console.log('Entered');
-      console.log(`Value: ${value}.`);
-      submit();
-    }
-
     e.key === 'Escape' && close();
 
-    if (values.active || e.key === 'Escape' || e.key === 'Enter') return;
+    if (values.active || e.key === 'Escape') return;
 
     open();
   }
 
+  const handleInputKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && submit();
+
   const close = () => {
-    hasSearched && props.close();
+
+    if (searched) {
+      props.close();
+      setSearched(false);
+    };
+
     setValue('');
-    setHasSearched(false);
     setValues({ active: false, width: 192, height: 36 });
   }
 
   const submit = () => {
-    console.log('Hey');
-    console.log(`Value: ${value}.`);
-
     if (!value.trim()) return;
-    console.log(`Value: ${value}.`);
+    setSearched(true);
     props.search(value);
-    setHasSearched(true);
   };
 
   const search = (event: React.FormEvent<HTMLInputElement>) => setValue(event.currentTarget.value);
@@ -64,9 +55,8 @@ const Search = (props: { search: (value: string) => void, close: () => void }) =
       {values.active
         ?
         <SearchContainer>
-          <Input autoFocus={true} value={value} onChange={search} />
-          <button onClick={submit}>Search</button>
-          <Filters />
+          <Input autoFocus={true} value={value} onChange={search} onKeyPress={handleInputKeydown} />
+          {searched && <Filters />}
           <Close onClick={close} />
         </SearchContainer>
         : <Hint onClick={open}>Click to search..</Hint>
