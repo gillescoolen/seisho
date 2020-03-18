@@ -20,8 +20,6 @@ const ChapterList = (props: { manga: Manga }) => {
 
   const viewDate = (chapter: Chapter) => {
     const date = chapter.getDate();
-    console.log(date);
-    console.log(date.toISOString());
     return `${date.getUTCDate()}-${date.getUTCMonth() + 1}-${date.getUTCFullYear()}`;
   };
 
