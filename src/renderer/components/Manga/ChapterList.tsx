@@ -17,13 +17,13 @@ const ChapterList = (props: { manga: Manga }) => {
   return (
     <List>
       <Filters>
-        <MangaTracker manga={props.manga}/>
+        <MangaTracker manga={props.manga} />
       </Filters>
       {props.manga.getChapters().reverse().map((chapter, index) => (
         <Chapter
-          to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
           key={index}
           className={setUnreadClass(index)}
+          to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
         >
           {chapter.getTitle()}
         </Chapter>

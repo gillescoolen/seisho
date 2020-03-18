@@ -89,7 +89,7 @@ const Reader = (props: any) => {
 
   return (
     <Container>
-      <Link ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }}/>
+      <Link ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }} />
       <div>
         {chapter.getTitle()}
       </div>
@@ -98,12 +98,11 @@ const Reader = (props: any) => {
         <Page>
           <p>{chapter.getTitle()} Finished.</p>
           {!manga.hasNextChapter() &&
-          <p>No next chapter found.</p>
+            <p>No next chapter found.</p>
           }
         </Page>
-        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }}/>
+        : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }} />
       }
-
       {!chapter.completed() && <div>{viewProgress()}</div>}
     </Container>
   );

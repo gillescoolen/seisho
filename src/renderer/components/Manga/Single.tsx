@@ -37,32 +37,32 @@ const Single = (props: any) => {
 
   return (
     <Container>
-      <Link ref={buttonRef as any} to={{ pathname: `/overview` }}/>
+      <Link ref={buttonRef as any} to={{ pathname: `/overview` }} />
       <InfoArea
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <img src={manga.getThumbnailUrl()}/>
+        <img src={manga.getThumbnailUrl()} />
         <h1>{manga.getTitle()}</h1>
         {!loading &&
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          {manga.getDescription()}
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            {manga.getDescription()}
+          </motion.p>
         }
       </InfoArea>
       {!loading &&
-      <ChaptersArea
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <ChapterList manga={manga}/>
-      </ChaptersArea>
+        <ChaptersArea
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <ChapterList manga={manga} />
+        </ChaptersArea>
       }
     </Container>
   );
