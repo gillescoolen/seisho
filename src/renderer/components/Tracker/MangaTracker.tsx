@@ -11,10 +11,8 @@ const MangaTracker = (props: { manga: Manga, tracker: AniList }) => {
   const [tracked, setTracked] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-
   useEffect(() => {
     (async () => {
-      setSyncing(true);
       manga.setTracker(props.tracker);
       await manga.syncFromTracker();
       setSyncing(false);
@@ -39,11 +37,10 @@ const MangaTracker = (props: { manga: Manga, tracker: AniList }) => {
   const sync = async () => {
     setSyncing(true);
     await manga.syncToTracker();
-    setSyncing(false);
   };
   return (
     <Container>
-      {syncing ? <Spinner/>
+      {syncing ? <Spinner />
         : (tracked
           ? <Button onClick={sync}>Sync to AniList</Button>
           : <Button onClick={add}>Add to AniList</Button>)
