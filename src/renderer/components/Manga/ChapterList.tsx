@@ -26,16 +26,16 @@ const ChapterList = (props: { manga: Manga }) => {
   return (
     <List>
       <Filters>
-        <MangaTracker manga={props.manga} tracker={anilist} />
+        {anilist.isLoggedIn() && <MangaTracker manga={props.manga} tracker={anilist} />}
       </Filters>
       {props.manga.getChapters().reverse().map((chapter, index) => (
-        <Chapter
+        <ChapterLink
           key={index}
           className={setUnreadClass(index)}
           to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
         >
           {chapter.getTitle()}
-          <br/>
+          <br />
           <Date>{viewDate(chapter)}</Date>
         </ChapterLink>
       ))}
