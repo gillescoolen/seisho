@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader/root';
 import { Manga } from '../../../domain/manga/manga';
 import { Link } from 'react-router-dom';
 import MangaTracker from '../Tracker/MangaTracker';
+import { Chapter } from '../../../domain/manga/chapter';
 import { AniList } from '../../../domain/anilist/anilist';
 
 const ChapterList = (props: { manga: Manga }) => {
@@ -16,19 +17,27 @@ const ChapterList = (props: { manga: Manga }) => {
 
     return read > index ? 'unread' : '';
   };
+
+  const viewDate = (chapter: Chapter) => {
+    const date = chapter.getDate();
+    return `${date.getUTCDate()}-${date.getUTCMonth() + 1}-${date.getUTCFullYear()}`;
+  };
+
   return (
     <List>
       <Filters>
         {anilist.isLoggedIn() && <MangaTracker manga={props.manga} tracker={anilist}/>}
       </Filters>
       {props.manga.getChapters().reverse().map((chapter, index) => (
-        <Chapter
+        <ChapterLink
           to={{ pathname: `reader/${props.manga.getDetailsLink()}`, state: { chapter, manga: props.manga } }}
           key={index}
           className={setUnreadClass(index)}
         >
           {chapter.getTitle()}
-        </Chapter>
+          <br/>
+          <Date>{viewDate(chapter)}</Date>
+        </ChapterLink>
       ))}
     </List>
   );
@@ -47,7 +56,11 @@ const List = styled.ul`
   border: 5px solid #1d2c42;
 `;
 
-const Chapter = styled(Link)`
+const Date = styled.small`
+  color: #C8C8C8;
+`;
+
+const ChapterLink = styled(Link)`
   color: white;
   padding: 1rem;
   display: block;
