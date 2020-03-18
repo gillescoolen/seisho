@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Home from './components/Home';
+import Index from './components/Index';
 
 // Create main element
 const mainElement = document.createElement('div');
@@ -16,4 +16,4 @@ const render = (Component: () => JSX.Element) => {
   );
 };
 
-render(Home);
+render(Index);
