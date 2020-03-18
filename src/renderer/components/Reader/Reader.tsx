@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 
 
 const Reader = (props: any) => {
+  const [loading, load] = useState(true);
   const [manga] = useState<Manga>(props.location.state.manga);
   const [chapter, setChapter] = useState<Chapter>(props.location.state.chapter);
-  const [loading, load] = useState(true);
 
   const buttonRef = React.createRef<typeof Link>();
 
@@ -95,9 +95,9 @@ const Reader = (props: any) => {
   return (
     <Container>
       <Link ref={buttonRef as any} to={{ pathname: `/${manga.getDetailsLink()}`, state: manga }} />
-      <div>
-        {chapter.getTitle()}
-      </div>
+      <Info>
+        {chapter.getTitle()} - Page {!chapter.completed() && viewProgress()}
+      </Info>
       {chapter.completed()
         ?
         <Page>
@@ -108,13 +108,12 @@ const Reader = (props: any) => {
         </Page>
         : <Page style={{ backgroundImage: `url(${chapter.getCurrentPage()})` }} />
       }
-      {!chapter.completed() && <div>{viewProgress()}</div>}
     </Container>
   );
 };
 
 const Page = styled.div`
-  width: 90vw;
+  width: 100%;
   height: 100%;
   display: flex;
   flex: 1 1 auto;
@@ -133,6 +132,22 @@ const Container = styled.div`
   flex: 1 1 auto;
   align-items: center;
   flex-direction: column;
+`;
+
+const Info = styled.div`
+  z-index: 15;
+  opacity: 0.3;
+  font-size: 16px;
+  user-select: none;
+  font-weight: 700;
+  margin-top: -35px;
+  position: absolute;
+  transition: 0.3s all;
+
+  &:hover {
+    opacity: 0.8;
+    transition: 0.1s all;
+  }
 `;
 
 export default hot(Reader);

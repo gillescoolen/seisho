@@ -8,12 +8,11 @@ import { Chapter } from '../../../domain/manga/chapter';
 import { AniList } from '../../../domain/anilist/anilist';
 
 const ChapterList = (props: { manga: Manga }) => {
-  const read = props.manga.getChapters().length - props.manga.getProgress();
   const anilist = new AniList();
+  const read = props.manga.getChapters().length - props.manga.getProgress();
+
   const setUnreadClass = (index: number) => {
-    if (props.manga.isUnread()) {
-      return 'unread';
-    }
+    if (props.manga.isUnread()) return 'unread';
 
     return read > index ? 'unread' : '';
   };
@@ -46,30 +45,30 @@ const ChapterList = (props: { manga: Manga }) => {
 const Filters = styled.div`
   padding: 1rem 1rem;
   font-weight: 700;
-  border-bottom: 5px solid #1d2c42;
+  border-bottom: 3px solid #1c293b;
 `;
 
 const List = styled.ul`
   padding: 0;
   list-style: none;
   border-radius: 15px;
-  border: 5px solid #1d2c42;
+  border: 3px solid #1c293b;
 `;
 
 const Date = styled.small`
-  color: #C8C8C8;
+  opacity: 0.4;
 `;
 
 const ChapterLink = styled(Link)`
   color: white;
+  opacity: 0.3;
   padding: 1rem;
   display: block;
-  border-radius: 3px;
   text-decoration: none;
-  border-bottom: 1px solid #2a3442;
+  border-bottom: 1px solid #1c293b;
 
   &.unread {
-    background-color: #414a5c;
+    opacity: 1;
   }
 
   &:hover {
