@@ -28,13 +28,10 @@ const Search = (props: { search: (value: string) => void, close: () => void }) =
   const handleInputKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && submit();
 
   const close = () => {
-
-    if (searched) {
-      props.close();
-      setSearched(false);
-    };
+    searched && props.close();
 
     setValue('');
+    setSearched(false);
     setValues({ active: false, width: 192, height: 36 });
   }
 
@@ -138,6 +135,7 @@ const Input = styled.input`
   height: 1.5rem;
   padding: 0.3rem;
   font-size: 16px;
+  font-weight: 700;
   border-radius: 5px;
   flex-direction: column;
   background-color: #1b2033;
