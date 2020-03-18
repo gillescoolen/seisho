@@ -59,7 +59,7 @@ const List = styled.ul`
 `;
 
 const Date = styled.small`
-  color: white;
+  color: #C8C8C8;
 `;
 
 const ChapterLink = styled(Link)`
