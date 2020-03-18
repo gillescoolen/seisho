@@ -12,10 +12,13 @@ import { MediaListStatus } from '../../domain/anilist/types';
 const anilist = new AniList();
 const mangaSee = new MangaseeSource();
 
+console.log(anilist.getCurrentUser());
+
 const anilistLogin = async () => {
   await anilist.login();
   // Maybe have a snackbar or something pop up. looks fancier.
   alert('successfully logged in!');
+  console.log(anilist.getCurrentUser());
 };
 
 const search = async () => {
@@ -85,6 +88,8 @@ const searchWithGenres = async () => {
   console.log(await mangaSee.search('', 1, genres, genresNo));
 };
 
+const logout = () => anilist.logout();
+
 const Home = () => (
   <HashRouter>
     <Container>
@@ -106,6 +111,7 @@ const Home = () => (
           <button onClick={syncEntry}>syncEntry</button>
           <button onClick={persistProgressWithoutTracker}>persistProgressWithoutTracker</button>
           <button onClick={searchWithGenres}>search with genres</button>
+          <button onClick={logout}>logout</button>
         </Route>
       </Switch>
     </Container>
