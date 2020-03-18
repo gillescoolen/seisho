@@ -88,13 +88,13 @@ const searchWithGenres = async () => {
 const Home = () => (
   <HashRouter>
     <Container>
-      <Toolbar/>
-      <GlobalStyles/>
+      <Toolbar />
+      <GlobalStyles />
       <Switch>
-        <Route path="/manga/reader/:title" component={Reader}/>
-        <Route path="/manga/:title" component={Single}/>
+        <Route path="/manga/reader/:title" component={Reader} />
+        <Route path="/manga/:title" component={Single} />
         <Route path="/overview">
-          <Overview/>
+          <Overview />
         </Route>
         <Route path="/">
           <h1>Welcome struggler</h1>
@@ -123,6 +123,7 @@ const Container = styled.div`
 const GlobalStyles = createGlobalStyle`
   body {
     margin: 0;
+    overflow-y:scroll;
     font-family: 'Arial';
   }
 
@@ -131,15 +132,15 @@ const GlobalStyles = createGlobalStyle`
     border-radius: none;
     
     &-track {
-      background: #141414;
+      background: #181b21;
     }
 
     &-thumb {
-      background: #262626;
+      background: #1c2029;
       border-radius: 0px;
 
       &:hover {
-        background: #262626;
+        background: #1e232e;
         border-radius: 0px;
       }
     }
