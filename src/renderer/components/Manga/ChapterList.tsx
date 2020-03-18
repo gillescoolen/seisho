@@ -19,7 +19,7 @@ const ChapterList = (props: { manga: Manga }) => {
   return (
     <List>
       <Filters>
-        <MangaTracker manga={props.manga} />
+        <MangaTracker manga={props.manga} tracker={anilist} />
       </Filters>
       {props.manga.getChapters().reverse().map((chapter, index) => (
         <Chapter
