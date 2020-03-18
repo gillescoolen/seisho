@@ -16,6 +16,10 @@ export class AniList {
     return this.currentUser;
   }
 
+  public isLoggedIn() {
+    return this.accessToken.length !== 0;
+  }
+
   constructor() {
     const accessToken = localStorage.getItem(AniList.ANILIST_PERSIST_KEY);
     const user = localStorage.getItem(AniList.ANILIST_USER_PERSIST_KEY);
