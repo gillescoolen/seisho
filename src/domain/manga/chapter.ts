@@ -20,6 +20,10 @@ export abstract class Chapter extends HttpResource {
     return (fetchedPage) ? fetchedPage.src : page;
   }
 
+  public getPages() {
+    return this.fetchedPages;
+  }
+
   public getCurrentPageNumber() {
     return this.currentPage;
   }

@@ -1,5 +1,4 @@
 import React from 'react';
-import Reader from './Reader/Reader';
 import Toolbar from './Toolbar/Toolbar';
 import { Overview, Single } from './Manga';
 import { hot } from 'react-hot-loader/root';
@@ -8,6 +7,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { AniList } from '../../domain/anilist/anilist';
 import { MangaseeSource } from '../../domain/manga/mangasee/mangasee-source';
 import { MediaListStatus } from '../../domain/anilist/types';
+import WebtoonReader from './Reader/WebtoonReader';
 
 const anilist = new AniList();
 const mangaSee = new MangaseeSource();
@@ -96,7 +96,7 @@ const Home = () => (
       <Toolbar />
       <GlobalStyles />
       <Switch>
-        <Route path="/manga/reader/:title" component={Reader} />
+        <Route path="/manga/reader/:title" component={WebtoonReader} />
         <Route path="/manga/:title" component={Single} />
         <Route path="/overview">
           <Overview />
