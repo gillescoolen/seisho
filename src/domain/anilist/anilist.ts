@@ -41,6 +41,8 @@ export class AniList {
         show: false
       });
 
+      authWindow.webContents.session.clearStorageData();
+
       authWindow.webContents.on('dom-ready', async () => {
         if (!authWindow) {
           return;
