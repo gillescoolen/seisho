@@ -25,6 +25,7 @@ export class MangaseeSource extends MangaSource {
    genre:
    genreNo:
     */
+  // tslint:disable-next-line: max-line-length
   async search(name: string, pageNumber: number, genres: string[] = [], genresExclude: string[] = []): Promise<MangaseeManga[]> {
     const formData = new FormData();
     formData.set('keyword', name);
@@ -41,6 +42,7 @@ export class MangaseeSource extends MangaSource {
     }
 
     const html = await this.postForm<string>(`${this.baseUri}/search/request.php`, formData);
+    if (html === '') return [];
     const document = await this.parseHTML(html);
 
     return [...document.querySelectorAll<HTMLDivElement>('.requested')].map(requestedElement => {
@@ -101,4 +103,3 @@ export class MangaseeSource extends MangaSource {
     });
   }
 }
-

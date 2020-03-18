@@ -11,10 +11,8 @@ const MangaTracker = (props: { manga: Manga, tracker: AniList }) => {
   const [tracked, setTracked] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-
   useEffect(() => {
     (async () => {
-      setSyncing(true);
       manga.setTracker(props.tracker);
       await manga.syncFromTracker();
       setSyncing(false);
@@ -24,6 +22,7 @@ const MangaTracker = (props: { manga: Manga, tracker: AniList }) => {
 
   const add = async () => {
     setSyncing(true);
+
     const result = await props.tracker.search(manga.getTitle(), 1);
     const counterpart = result.media[0];
 
@@ -42,21 +41,15 @@ const MangaTracker = (props: { manga: Manga, tracker: AniList }) => {
     setSyncing(false);
   };
   return (
-    <Container>
-      {syncing ? <Spinner/>
+    <div>
+      {syncing ? <Spinner size={{ width: 26, height: 26 }} />
         : (tracked
           ? <Button onClick={sync}>Sync to AniList</Button>
           : <Button onClick={add}>Add to AniList</Button>)
       }
-
-    </Container>
+    </div>
   );
 };
-
-
-const Container = styled.div`
-  
-`;
 
 const Button = styled.button`
   border: none;

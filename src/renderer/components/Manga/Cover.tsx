@@ -24,9 +24,10 @@ const StyledCover = styled.div`
   width: 250px;
   height: 400px;
   display: flex;
+  border-radius: 3px;
+  transition: 0.5s all;
   background-size: cover;
   flex-direction: column-reverse;
-  transition: 0.5s all;
   background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%), ${(props: { manga: Manga }) => `url(${props.manga.getThumbnailUrl()})`};
 
   &:hover {
