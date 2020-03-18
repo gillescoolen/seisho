@@ -10,23 +10,25 @@ export class AniList {
 
   private readonly baseUrl = 'https://graphql.anilist.co';
 
-  private readonly currentUser: AniListUser | null = null;
+  private currentUser: AniListUser | null = null;
 
   public getCurrentUser() {
     return this.currentUser;
   }
 
+  public isLoggedIn() {
+    return this.accessToken.length !== 0;
+  }
+
   constructor() {
-    const accessToken = localStorage.getItem(AniList.ANILIST_PERSIST_KEY);
-    const user = localStorage.getItem(AniList.ANILIST_USER_PERSIST_KEY);
+    this.recover();
+  }
 
-    if (accessToken) {
-      this.accessToken = accessToken;
-    }
-
-    if (user) {
-      this.currentUser = JSON.parse(user) as AniListUser;
-    }
+  public logout() {
+    this.accessToken = '';
+    this.currentUser = null;
+    localStorage.removeItem(AniList.ANILIST_USER_PERSIST_KEY);
+    localStorage.removeItem(AniList.ANILIST_PERSIST_KEY);
   }
 
   public login(): Promise<void> {
@@ -95,6 +97,20 @@ export class AniList {
     }
     const user = (await response.json()).data.Data as AniListUser;
     localStorage.setItem(AniList.ANILIST_USER_PERSIST_KEY, JSON.stringify(user));
+    this.recover();
+  }
+
+  private recover() {
+    const accessToken = localStorage.getItem(AniList.ANILIST_PERSIST_KEY);
+    const user = localStorage.getItem(AniList.ANILIST_USER_PERSIST_KEY);
+
+    if (accessToken) {
+      this.accessToken = accessToken;
+    }
+
+    if (user) {
+      this.currentUser = JSON.parse(user) as AniListUser;
+    }
   }
 
   public async search(name: string, pageNumber: number): Promise<AniListSearchResponse> {
