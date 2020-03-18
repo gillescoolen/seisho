@@ -4,9 +4,11 @@ import { hot } from 'react-hot-loader/root';
 import { Manga } from '../../../domain/manga/manga';
 import { Link } from 'react-router-dom';
 import MangaTracker from '../Tracker/MangaTracker';
+import { AniList } from '../../../domain/anilist/anilist';
 
 const ChapterList = (props: { manga: Manga }) => {
   const read = props.manga.getChapters().length - props.manga.getProgress();
+  const anilist = new AniList();
   const setUnreadClass = (index: number) => {
     if (props.manga.isUnread()) {
       return 'unread';
@@ -17,7 +19,7 @@ const ChapterList = (props: { manga: Manga }) => {
   return (
     <List>
       <Filters>
-        <MangaTracker manga={props.manga}/>
+        {anilist.isLoggedIn() && <MangaTracker manga={props.manga} tracker={anilist}/>}
       </Filters>
       {props.manga.getChapters().reverse().map((chapter, index) => (
         <Chapter
