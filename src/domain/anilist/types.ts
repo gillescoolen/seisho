@@ -13,7 +13,7 @@ export interface AniListSearchResponse {
 
 export interface AniListMedia {
   id: number;
-  coverImage: AniListMediaCoverImage;
+  coverImage: AniListImage;
   description: string;
   startDate: AnilistDate;
   status: AniListMediaStatus;
@@ -33,7 +33,7 @@ export interface AniListMediaTitle {
   native: string;
 }
 
-export interface AniListMediaCoverImage {
+export interface AniListImage {
   large: string;
   extraLarge: string;
   medium: string;
@@ -87,4 +87,10 @@ export interface SaveMediaListEntry {
   advancedScores: number[]; // not used
   startedAt: AnilistDate;
   completedAt: AnilistDate;
+}
+
+export interface AniListUser {
+  id: number;
+  name: string;
+  avatar: AniListImage;
 }

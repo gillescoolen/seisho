@@ -12,6 +12,8 @@ import { MediaListStatus } from '../../domain/anilist/types';
 const anilist = new AniList();
 const mangaSee = new MangaseeSource();
 
+console.log(anilist.getCurrentUser());
+
 const anilistLogin = async () => {
   await anilist.login();
   // Maybe have a snackbar or something pop up. looks fancier.

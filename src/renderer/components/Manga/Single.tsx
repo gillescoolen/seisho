@@ -46,13 +46,21 @@ const Single = (props: any) => {
         <img src={manga.getThumbnailUrl()} />
         <h1>{manga.getTitle()}</h1>
         {!loading &&
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          Genres:
+          <ul>
+            {manga.getGenres().map((genre: string, key: number) => (
+              <li key={key}>{genre}</li>
+            ))}
+          </ul>
+          <p>
             {manga.getDescription()}
-          </motion.p>
+          </p>
+        </motion.div>
         }
       </InfoArea>
       {!loading &&
