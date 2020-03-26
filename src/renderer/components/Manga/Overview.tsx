@@ -26,7 +26,9 @@ const Overview = () => {
 
     window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    };
   }, [loading, activeGenres, inactiveGenres]);
 
   useEffect(() => {
@@ -50,6 +52,7 @@ const Overview = () => {
   const submit = async (value: string) => {
     setSearch(value);
     setManga([]);
+    setPage(1);
     setMessage('No manga found.');
     setLoading(true);
   }
@@ -128,6 +131,7 @@ const Message = styled(motion.div)`
 const Container = styled(motion.div)`
   height: 100%;
   display: flex;
+  padding-top: 1rem;
   flex-direction: row;
   align-items: bottom;
   justify-content: center;

@@ -58,11 +58,11 @@ const Menu = styled(motion.div)`
 const Login = styled.button`
   color: white;
   border: none;
-  font-weight: 700;
   font-size: 14px;
+  font-weight: 700;
   border-radius: 5px;
-  padding: 0.6rem 0.8rem;
   transition: 0.2s all;
+  padding: 0.6rem 0.8rem;
   background-color: #438c3c;
 
   &:hover {

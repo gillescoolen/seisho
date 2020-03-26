@@ -10,7 +10,7 @@ const Cover = (props: { manga: Manga }) => {
       <StyledCover manga={props.manga}>
         <Title>{props.manga.getTitle()}</Title>
       </StyledCover>
-    </StyledLink>
+    </StyledLink >
   )
 };
 

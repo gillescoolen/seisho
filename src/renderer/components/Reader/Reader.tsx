@@ -138,10 +138,9 @@ const Info = styled.div`
   z-index: 15;
   opacity: 0.3;
   font-size: 16px;
+  margin: 0.5rem;
   user-select: none;
   font-weight: 700;
-  margin-top: -35px;
-  position: absolute;
   transition: 0.3s all;
 
   &:hover {
